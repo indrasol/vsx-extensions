@@ -1,0 +1,29 @@
+name: Extension idea
+description: Propose a new Indrasol Labs extension. Maintainers review ideas regularly.
+title: "[idea] <name>: <one-liner>"
+labels: ["idea"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem (specific scenario)
+      description: What happens, to whom, how often? Link public complaints if you have them.
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: One-line solution and the 10-second GIF
+      description: What does the user see in the first 10 seconds?
+    validations:
+      required: true
+  - type: textarea
+    id: competitors
+    attributes:
+      label: Existing options you know of
+      description: Marketplace / Open VSX / GitHub links, and why they fall short.
+  - type: dropdown
+    id: lane
+    attributes:
+      label: Rough size
+      options: ["Mini (≤ 2 weeks)", "Standard (≤ 4 weeks)", "Bigger / not sure"]

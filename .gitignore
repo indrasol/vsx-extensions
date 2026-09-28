@@ -1,0 +1,43 @@
+# Dependencies and builds
+node_modules/
+dist/
+out/
+*.vsix
+*.tsbuildinfo
+.pnpm-store/
+
+# Test artifacts
+.vscode-test/
+.vscode-test-web/
+coverage/
+
+# Environment and secrets (templates like .env.example are committed)
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Supabase / Netlify local state
+supabase/.temp/
+supabase/.branches/
+.netlify/
+
+# Editors and OS
+.DS_Store
+Thumbs.db
+.idea/
+*.swp
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/launch.json
+!.vscode/tasks.json
+
+# Logs
+npm-debug.log*
+pnpm-debug.log*
+*.log
+
+# Claude Code local settings (may point at private sibling folders)
+.claude/settings.local.json

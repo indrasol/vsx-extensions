@@ -1,0 +1,33 @@
+name: Bug report
+description: Something in an Indrasol Labs extension is broken.
+title: "[<extension>] <short description>"
+labels: ["bug"]
+body:
+  - type: input
+    id: extension
+    attributes:
+      label: Extension and version
+      placeholder: my-extension 1.2.0
+    validations:
+      required: true
+  - type: input
+    id: host
+    attributes:
+      label: Editor and OS
+      placeholder: VS Code 1.10x / Cursor 1.x, macOS 15
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected vs actual
+  - type: textarea
+    id: logs
+    attributes:
+      label: Output panel / Developer Tools console (remove anything private)
