@@ -1,13 +1,3 @@
-# Default: Labs leads review everything.
-*                                   @indrasol/labs-leads
-
-# Security-sensitive paths additionally require a Security Reviewer.
-/.github/workflows/release.yml      @indrasol/labs-leads @indrasol/security-reviewers
-/.github/workflows/security.yml     @indrasol/labs-leads @indrasol/security-reviewers
-/packages/labs-core/                @indrasol/labs-leads @indrasol/security-reviewers
-/pnpm-lock.yaml                     @indrasol/labs-leads @indrasol/security-reviewers
-/package.json                       @indrasol/labs-leads @indrasol/security-reviewers
-/extensions/*/package.json          @indrasol/labs-leads @indrasol/security-reviewers
-
-# Decisions are immutable; changing them needs a lead.
-/docs/adr/                          @indrasol/labs-leads
+# Maintainer: every change is owned by the Labs maintainer.
+# As engineers join, add them here (or create an org team and reference it, e.g. @indrasol/labs-maintainers).
+*    @Rithin25295

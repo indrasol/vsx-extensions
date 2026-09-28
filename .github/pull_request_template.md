@@ -14,6 +14,6 @@
 - [ ] Version bumped (SemVer) + CHANGELOG
 - [ ] Works in VS Code and Cursor
 - [ ] `vsce ls` reviewed: only dist/, media/, README, CHANGELOG, LICENSE, telemetry.json ship
-- [ ] Release checklist in docs/security-practices.md signed off by a Security Reviewer
+- [ ] Release checklist in docs/security-practices.md signed off by the maintainer
 - [ ] README / GIF / telemetry.json current
 - [ ] Tag to push after merge: `<ext>@vX.Y.Z`

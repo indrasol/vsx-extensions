@@ -30,8 +30,8 @@ tools you install, and borrow anything useful.
 4. **An agent implements; an engineer owns the result.** Claude Code implements each task in the
    engineer's editor, runs the tests and opens a pull request. Commits carry a `Co-Authored-By`
    trailer so AI involvement is visible in the history.
-5. **Humans review everything.** Every PR needs a human approval; release workflows, the shared
-   `labs-core` package and dependency changes also need a security reviewer.
+5. **Humans review everything.** A maintainer reviews every PR and every AI-written line before it
+   merges, and signs off the security checklist before each release.
 6. **Security gates are automatic and mandatory.** See [security practices](security-practices.md):
    CodeQL, secret scanning with push protection, gitleaks, dependency audit, a CycloneDX SBOM,
    and a check that the package ships only the files it should.

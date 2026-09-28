@@ -4,7 +4,7 @@ Indrasol is a cybersecurity company, so Indrasol Labs extensions are held to a v
 standard. This page is linked from every extension README. To report a vulnerability, see
 [`SECURITY.md`](../SECURITY.md).
 
-## Release checklist (a Security Reviewer signs off in the release PR)
+## Release checklist (the maintainer signs off in the release PR)
 - [ ] Dependencies are minimal and pinned via the lockfile. No `postinstall` scripts
       (`ignore-scripts=true`). `pnpm audit` shows no high or critical issues.
 - [ ] Secret scan (gitleaks in CI, GitHub push protection) is clean. Both registries also scan
@@ -25,7 +25,7 @@ standard. This page is linked from every extension README. To report a vulnerabi
   personal access tokens exist (ADR-0004).
 - The same VSIX file is published to both registries; its SHA-256 is in the GitHub Release so
   anyone can verify what they installed (ADR-0003).
-- `CODEOWNERS` requires a Security Reviewer on release workflows, `packages/labs-core` and dependency changes.
+- All changes go through pull requests on a protected `main`; `CODEOWNERS` routes every change to a maintainer.
 
 ## Program-level
 - Two-factor authentication on every Marketplace, Open VSX and GitHub account; publisher and

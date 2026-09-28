@@ -14,8 +14,7 @@ Thanks for helping. This repo is a pnpm monorepo; every extension lives under `e
 ## Workflow
 1. Branch from `main`: `ext/<extension>/<task>` or `chore/<task>`.
 2. Commit with Conventional Commits, scope = workspace name: `feat(<ext>): add status bar badge`.
-3. Open a PR. CI must be green and one human review is required; changes to release workflows,
-   `packages/labs-core/**` or dependencies also need a Security Reviewer (see `CODEOWNERS`).
+3. Open a PR. CI must be green and a maintainer reviews it (see `CODEOWNERS`).
 4. Releases are cut only by maintainers tagging `<extension>@vX.Y.Z` on `main`; `release.yml` does
    the rest after a human approves the publish environment.
 
