@@ -4,11 +4,13 @@
 - **Date:** 2026-09-27
 
 ## Context
+
 Marketplace extension identifiers are permanent: a removed extension's name cannot be
 reused, and the publisher id cannot change. Consistent naming also makes the "More from
 Indrasol Labs" cross-promotion work.
 
 ## Decision
+
 - Publisher / namespace: `Indrasol` (capital I, exactly as registered) on both registries. Display name "Indrasol".
 - Extension id: `Indrasol.<kebab-name>`; workspace folder `extensions/<kebab-name>`;
   display name Title Case; description ends with "by Indrasol Labs".
@@ -20,8 +22,10 @@ Indrasol Labs" cross-promotion work.
   the name is burned once published.
 
 ## Alternatives considered
+
 - Prefixing every extension with `labs-`: clutters search results; the publisher already brands it.
 
 ## Consequences
+
 Names are chosen at G1 (spec approval) and checked for collisions on both registries before
 the first tag.

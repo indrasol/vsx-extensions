@@ -5,6 +5,7 @@ standard. This page is linked from every extension README. To report a vulnerabi
 [`SECURITY.md`](../SECURITY.md).
 
 ## Release checklist (the maintainer signs off in the release PR)
+
 - [ ] Dependencies are minimal and pinned via the lockfile. No `postinstall` scripts
       (`ignore-scripts=true`). `pnpm audit` shows no high or critical issues.
 - [ ] Secret scan (gitleaks in CI, GitHub push protection) is clean. Both registries also scan
@@ -19,6 +20,7 @@ standard. This page is linked from every extension README. To report a vulnerabi
 - [ ] Release notes and CHANGELOG are updated. The GitHub Release includes the VSIX, its SHA-256 and the SBOM.
 
 ## Pipeline controls
+
 - Publishing happens **only from CI**, from a protected tag, in a GitHub environment that requires
   a human approval. No laptop publishes.
 - Marketplace publishing uses a short-lived Entra ID (OIDC) credential from a managed identity; no
@@ -28,6 +30,7 @@ standard. This page is linked from every extension README. To report a vulnerabi
 - All changes go through pull requests on a protected `main`; `CODEOWNERS` routes every change to a maintainer.
 
 ## Program-level
+
 - Two-factor authentication on every Marketplace, Open VSX and GitHub account; publisher and
   namespace membership reviewed quarterly.
 - Dependabot security updates, secret scanning with push protection and CodeQL are enabled on this repo.

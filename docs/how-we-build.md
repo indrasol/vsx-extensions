@@ -40,6 +40,7 @@ tools you install, and borrow anything useful.
    carries the VSIX, its SHA-256 and the SBOM so you can verify what you installed.
 
 ## Why this matters for the tools you install
+
 - **Small scope:** each extension does one job, so it's easy to read and audit.
 - **Local-first:** no network calls by default; any telemetry is anonymous, documented and
   follows your VS Code telemetry setting.

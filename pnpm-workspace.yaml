@@ -1,0 +1,6 @@
+packages:
+  - 'extensions/*'
+  - 'packages/*'
+  - 'templates/*'
+  - 'collector'
+  - 'dashboard'

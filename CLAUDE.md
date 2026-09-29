@@ -5,10 +5,12 @@ VS Code Marketplace and Open VSX. Publisher: `Indrasol`.
 Repo: `github.com/indrasol/vsx-extensions` (public).
 
 ## Stack
+
 TypeScript (strict) · esbuild · pnpm workspaces · @vscode/test-cli · GitHub Actions ·
 Supabase (metrics) · Vite + React on Netlify (dashboard)
 
 ## Hard rules
+
 - Read docs/engineering-standards.md and docs/security-practices.md before any extension work.
 - Every new extension starts from templates/extension-starter/.
 - No network calls or telemetry without going through packages/labs-core and a documented opt-in.
@@ -21,6 +23,7 @@ Supabase (metrics) · Vite + React on Netlify (dashboard)
 - When given a task prompt, do exactly what it asks. Do not start the next task.
 
 ## Where to look
+
 - Engineering status: docs/PROGRESS.md · Decisions: docs/adr/ · Architecture: docs/architecture.md
 - Process: docs/how-we-build.md · Per-extension build notes: docs/build-notes/
 - Local setup: docs/development.md · Launched extension specs: docs/specs/<ext>.md

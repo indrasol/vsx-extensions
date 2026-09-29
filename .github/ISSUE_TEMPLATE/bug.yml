@@ -1,7 +1,7 @@
 name: Bug report
 description: Something in an Indrasol Labs extension is broken.
-title: "[<extension>] <short description>"
-labels: ["bug"]
+title: '[<extension>] <short description>'
+labels: ['bug']
 body:
   - type: input
     id: extension
