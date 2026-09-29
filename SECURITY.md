@@ -6,10 +6,11 @@ than "it works". This page explains how we build and how to reach us.
 ## Reporting a vulnerability
 
 Please **do not** open a public issue for security problems. Report privately via
-GitHub's *Report a vulnerability* button on this repository (Security → Advisories), or
+GitHub's _Report a vulnerability_ button on this repository (Security → Advisories), or
 email **security@indrasol.com**.
 
 We commit to:
+
 - acknowledging your report within **2 business days**;
 - a fix or mitigation for critical issues within **7 days**, and a coordinated disclosure
   timeline for everything else;

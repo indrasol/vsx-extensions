@@ -1,21 +1,22 @@
 # Architecture — repo, CI/CD and metrics pipeline
 
-*Living document describing the current state. Update when the structure changes.
-The reasoning behind each choice is in `docs/adr/`.*
+_Living document describing the current state. Update when the structure changes.
+The reasoning behind each choice is in `docs/adr/`._
 
 ## 1. Monorepo layout (target state)
 
 ```
 vsx-extensions/
 ├── CLAUDE.md · README.md · LICENSE · SECURITY.md · CONTRIBUTING.md · CODEOWNERS
-├── package.json · pnpm-workspace.yaml · tsconfig.base.json · eslint.config.js · .prettierrc
+├── package.json · pnpm-workspace.yaml · tsconfig.base.json · eslint.config.js · .prettierrc · .npmrc · .editorconfig
 ├── .github/
 │   ├── workflows/
 │   │   ├── ci.yml               every PR: lint → typecheck → test (xvfb) → package; uploads .vsix
 │   │   ├── security.yml         PR + weekly: gitleaks, pnpm audit, CycloneDX SBOM, vsce ls allow-list
 │   │   ├── release.yml          tag <ext>@vX.Y.Z → build → package once → publish both registries → GitHub Release
 │   │   └── metrics-collect.yml  daily cron → collector → Supabase
-│   ├── ISSUE_TEMPLATE/ · pull_request_template.md
+│   ├── ISSUE_TEMPLATE/ · pull_request_template.md · dependabot.yml
+├── .vscode/                     shared editor settings + recommended extensions
 ├── docs/                        architecture, engineering-standards, security-practices, development, PROGRESS, adr/, specs/
 ├── templates/extension-starter/ golden template (copied for every new extension)
 ├── packages/labs-core/          shared: logger, config, telemetry wrapper, "More from Labs" view
@@ -32,15 +33,15 @@ package time (ADR-0002).
 
 ## 2. Security controls (all free on a public repo)
 
-| Control | Where | Status |
-|---|---|---|
-| CodeQL (JS/TS) | GitHub *default setup*, no workflow file | enable in setup 0.2 |
-| Secret scanning + push protection | GitHub repo settings | enable in setup 0.2 |
-| Dependabot alerts + security updates | GitHub repo settings | enable in setup 0.2 |
-| gitleaks, `pnpm audit`, SBOM, ship-list check | `security.yml` | prompt 04 |
-| Branch ruleset `protect-main`, tag ruleset `protect-release-tags` | GitHub Rules | setup 0.2 |
-| Human approval on publish | GitHub environment `marketplace-publish` (required reviewers) | setup 0.2 |
-| CODEOWNERS security review on release/labs-core/deps | `CODEOWNERS` | in repo |
+| Control                                                           | Where                                                         | Status              |
+| ----------------------------------------------------------------- | ------------------------------------------------------------- | ------------------- |
+| CodeQL (JS/TS)                                                    | GitHub _default setup_, no workflow file                      | enable in setup 0.2 |
+| Secret scanning + push protection                                 | GitHub repo settings                                          | enable in setup 0.2 |
+| Dependabot alerts + security updates                              | GitHub repo settings                                          | enable in setup 0.2 |
+| gitleaks, `pnpm audit`, SBOM, ship-list check                     | `security.yml`                                                | prompt 04           |
+| Branch ruleset `protect-main`, tag ruleset `protect-release-tags` | GitHub Rules                                                  | setup 0.2           |
+| Human approval on publish                                         | GitHub environment `marketplace-publish` (required reviewers) | setup 0.2           |
+| CODEOWNERS security review on release/labs-core/deps              | `CODEOWNERS`                                                  | in repo             |
 
 ## 3. Release pipeline
 

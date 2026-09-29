@@ -1,0 +1,15 @@
+{
+  "name": "@indrasol/labs-core",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Shared core for Indrasol Labs extensions",
+  "license": "MIT",
+  "type": "module",
+  "main": "./src/index.ts",
+  "scripts": {
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "vitest run"
+  }
+}

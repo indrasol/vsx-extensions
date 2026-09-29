@@ -4,6 +4,7 @@
 - **Date:** 2026-09-27
 
 ## Context
+
 This repo is public (ADR-0005, ADR-0009). Extension code is effectively public once released,
 since every published VSIX can be unzipped and read, and open source is the norm for developer
 extensions and a trust signal for a security company. Planning material is different: the idea
@@ -16,6 +17,7 @@ Dependabot for free; private repositories draw on a metered minutes quota and ne
 for CodeQL and push protection.
 
 ## Decision
+
 - **Planning is private.** A private internal repository (Indrasol staff only) holds the program
   playbook, roadmap, task specs, prompts, launch plans, runbooks and reviews.
 - **Pre-release extension code is built privately, locally verified.** A new extension is
@@ -34,6 +36,7 @@ for CodeQL and push protection.
   (`docs/build-notes/`) are published here, per `docs/how-we-build.md`.
 
 ## Alternatives considered
+
 - Everything public, including in-progress builds: simplest, but reveals each extension 2–4
   weeks early. Rejected by preference; acceptable fallback if the move step becomes a burden.
 - Everything private: costs money (minutes, CodeQL, push protection) and loses the open-source
@@ -42,6 +45,7 @@ for CodeQL and push protection.
   dependency and a second CI setup. Rejected in favour of local checks until release candidate.
 
 ## Consequences
+
 Engineering docs in this repo stay self-contained and never reference private files. Security
 findings from CodeQL surface only at release candidate, so the move happens early enough to fix
 them before launch. Relative paths (tsconfig `extends`, the `labs-core` link) change on the move;

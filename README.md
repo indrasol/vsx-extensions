@@ -12,9 +12,9 @@ review everything as humans: see [how we build](docs/how-we-build.md). See
 
 ## Extensions
 
-| Extension | What it does | Marketplace | Open VSX | Status |
-|---|---|---|---|---|
-| _coming soon_ | | | | |
+| Extension     | What it does | Marketplace | Open VSX | Status |
+| ------------- | ------------ | ----------- | -------- | ------ |
+| _coming soon_ |              |             |          |        |
 
 ## Repository layout
 
