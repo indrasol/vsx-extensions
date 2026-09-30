@@ -41,6 +41,7 @@ package time (ADR-0002).
 | gitleaks, `pnpm audit`, SBOM, ship-list check                     | `security.yml`                                                | security.yml (in repo) |
 | Branch ruleset `protect-main`, tag ruleset `protect-release-tags` | GitHub Rules                                                  | setup 0.2              |
 | Human approval on publish                                         | GitHub environment `marketplace-publish` (required reviewers) | setup 0.2              |
+| Tag → package once → approval → Open VSX + Marketplace → Release  | `release.yml`                                                 | release.yml (in repo)  |
 | CODEOWNERS security review on release/labs-core/deps              | `CODEOWNERS`                                                  | in repo                |
 
 ## 3. Release pipeline

@@ -36,6 +36,37 @@ importers:
         specifier: 4.1.11
         version: 4.1.11(@types/node@22.20.4)(@vitest/coverage-v8@4.1.11)(vite@8.3.1(@types/node@22.20.4)(esbuild@0.28.2))
 
+  extensions/labs-pipeline-smoke:
+    dependencies:
+      '@indrasol/labs-core':
+        specifier: workspace:*
+        version: link:../../packages/labs-core
+    devDependencies:
+      '@types/mocha':
+        specifier: 10.0.10
+        version: 10.0.10
+      '@types/vscode':
+        specifier: 1.96.0
+        version: 1.96.0
+      '@vitest/coverage-v8':
+        specifier: 4.1.11
+        version: 4.1.11(vitest@4.1.11)
+      '@vscode/test-cli':
+        specifier: 0.0.15
+        version: 0.0.15
+      '@vscode/test-electron':
+        specifier: 3.1.0
+        version: 3.1.0
+      '@vscode/vsce':
+        specifier: 3.9.2
+        version: 3.9.2
+      esbuild:
+        specifier: 0.28.2
+        version: 0.28.2
+      mocha:
+        specifier: 11.7.6
+        version: 11.7.6
+
   packages/labs-core:
     devDependencies:
       '@types/vscode':

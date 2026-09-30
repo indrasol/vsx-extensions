@@ -1,0 +1,226 @@
+name: Release
+
+# Tag <ext>@vX.Y.Z → build and test → package the VSIX once → human approval → Open VSX and the
+# VS Code Marketplace (the same file) → GitHub Release with the VSIX, its SHA-256 and the SBOM.
+# ADR-0003, ADR-0004, docs/architecture.md §3. Dispatch modes: see docs/development.md "Releasing".
+on:
+  push:
+    tags: ['*@v*']
+  workflow_dispatch:
+    inputs:
+      extension:
+        description: Extension workspace under extensions/ (e.g. labs-pipeline-smoke)
+        required: true
+        type: string
+      mode:
+        description: dry-run builds and packages without publishing; profile-id prints the publisher identity's Azure DevOps profile id
+        required: true
+        type: choice
+        options: [dry-run, profile-id]
+        default: dry-run
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref }}-${{ inputs.extension }}
+  cancel-in-progress: false
+
+env:
+  OVSX_VERSION: 1.2.0
+  VSCE_VERSION: 3.9.2
+  # npx fetches the publishing CLIs; never run their install scripts.
+  npm_config_ignore_scripts: 'true'
+
+jobs:
+  prepare:
+    name: prepare
+    if: github.event_name == 'push' || inputs.mode == 'dry-run'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      ext: ${{ steps.parse.outputs.ext }}
+      version: ${{ steps.parse.outputs.version }}
+      tag: ${{ steps.parse.outputs.tag }}
+      vsix: ${{ steps.parse.outputs.vsix }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 22
+
+      # Refuses templates/, a tag/package.json version mismatch and a publisher other than Indrasol.
+      - id: parse
+        env:
+          EVENT: ${{ github.event_name }}
+          TAG: ${{ github.ref_name }}
+          EXTENSION: ${{ inputs.extension }}
+        run: |
+          if [ "$EVENT" = push ]; then
+            node scripts/release-parse.mjs --tag "$TAG"
+          else
+            node scripts/release-parse.mjs --extension "$EXTENSION"
+          fi
+
+  build:
+    name: build
+    needs: prepare
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      EXT: ${{ needs.prepare.outputs.ext }}
+      VERSION: ${{ needs.prepare.outputs.version }}
+      VSIX: ${{ needs.prepare.outputs.vsix }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: extensions/*/.vscode-test
+          key: vscode-test-${{ runner.os }}-${{ hashFiles('templates/*/.vscode-test.mjs', 'extensions/*/.vscode-test.mjs') }}
+          restore-keys: vscode-test-${{ runner.os }}-
+
+      - run: pnpm --filter "$EXT" lint
+      - run: pnpm --filter "$EXT" typecheck
+      - run: xvfb-run -a pnpm --filter "$EXT" test
+      - run: pnpm --filter "$EXT" build
+
+      # The only `vsce package` in this workflow; later jobs publish this exact file.
+      - run: pnpm --filter "$EXT" package
+
+      - name: Check the package
+        run: |
+          shopt -s nullglob
+          vsixes=("extensions/$EXT"/dist/*.vsix)
+          if [ "${#vsixes[@]}" -ne 1 ] || [ "${vsixes[0]}" != "extensions/$EXT/dist/$VSIX" ]; then
+            echo "::error::Expected exactly extensions/$EXT/dist/$VSIX, found: ${vsixes[*]:-nothing}"
+            exit 1
+          fi
+          node scripts/check-ship-list.mjs "$EXT"
+
+      - name: SBOM and SHA-256
+        run: |
+          mkdir release
+          mv "extensions/$EXT/dist/$VSIX" release/
+          node scripts/sbom.mjs "$EXT" --out "release/$EXT-$VERSION.cdx.json"
+          (cd release && sha256sum "$VSIX" > "$VSIX.sha256" && cat "$VSIX.sha256")
+
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: release-${{ env.EXT }}-${{ env.VERSION }}
+          path: release/
+          if-no-files-found: error
+
+  publish:
+    name: publish
+    needs: [prepare, build]
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment: marketplace-publish
+    permissions:
+      contents: read
+      id-token: write
+    env:
+      EXT: ${{ needs.prepare.outputs.ext }}
+      VERSION: ${{ needs.prepare.outputs.version }}
+      VSIX: ${{ needs.prepare.outputs.vsix }}
+    steps:
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: release-${{ env.EXT }}-${{ env.VERSION }}
+          path: release
+
+      - name: Verify SHA-256
+        working-directory: release
+        run: sha256sum --check --strict "$VSIX.sha256"
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 22
+
+      - name: Publish to Open VSX
+        env:
+          OVSX_TOKEN: ${{ secrets.OVSX_TOKEN }}
+        run: npx --yes "ovsx@$OVSX_VERSION" publish "release/$VSIX" -p "$OVSX_TOKEN" --skip-duplicate
+
+      - uses: azure/login@a641126d1b8aa4d1fa005f4f92df94a3a4c4c906 # v3.1.0
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          allow-no-subscriptions: true
+
+      - name: Publish to the VS Code Marketplace
+        run: npx --yes "@vscode/vsce@$VSCE_VERSION" publish --packagePath "release/$VSIX" --azure-credential --skip-duplicate
+
+  github-release:
+    name: github-release
+    needs: [prepare, publish]
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    env:
+      EXT: ${{ needs.prepare.outputs.ext }}
+      VERSION: ${{ needs.prepare.outputs.version }}
+      TAG: ${{ needs.prepare.outputs.tag }}
+      VSIX: ${{ needs.prepare.outputs.vsix }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: release-${{ env.EXT }}-${{ env.VERSION }}
+          path: release
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 22
+
+      - name: Create the GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          node scripts/release-notes.mjs "$EXT" "$VERSION" > "$RUNNER_TEMP/notes.md"
+          gh release create "$TAG" \
+            "release/$VSIX" "release/$VSIX.sha256" "release/$EXT-$VERSION.cdx.json" \
+            --repo "$GITHUB_REPOSITORY" --verify-tag \
+            --title "$EXT $VERSION" --notes-file "$RUNNER_TEMP/notes.md"
+
+  profile-id:
+    name: profile-id
+    if: github.event_name == 'workflow_dispatch' && inputs.mode == 'profile-id'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    environment: marketplace-publish
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: azure/login@a641126d1b8aa4d1fa005f4f92df94a3a4c4c906 # v3.1.0
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          allow-no-subscriptions: true
+
+      # The id to add to the Marketplace publisher as a member (not a secret; ADR-0004).
+      - name: Azure DevOps profile id of the managed identity
+        run: >-
+          az rest -u https://app.vssps.visualstudio.com/_apis/profile/profiles/me
+          --resource 499b84ac-1321-427f-aa17-267ca6975798 --query id -o tsv

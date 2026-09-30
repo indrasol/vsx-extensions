@@ -1,0 +1,129 @@
+{
+  "name": "labs-pipeline-smoke",
+  "displayName": "Labs Pipeline Smoke Test",
+  "description": "Does nothing. Verifies the Indrasol Labs release pipeline. by Indrasol Labs",
+  "version": "0.0.1",
+  "publisher": "Indrasol",
+  "license": "MIT",
+  "private": true,
+  "preview": true,
+  "icon": "media/icon.png",
+  "galleryBanner": {
+    "color": "#0B1F3A",
+    "theme": "dark"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/indrasol/vsx-extensions.git",
+    "directory": "extensions/labs-pipeline-smoke"
+  },
+  "homepage": "https://github.com/indrasol/vsx-extensions/tree/main/extensions/labs-pipeline-smoke#readme",
+  "bugs": {
+    "url": "https://github.com/indrasol/vsx-extensions/issues"
+  },
+  "engines": {
+    "vscode": "^1.96.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "indrasol",
+    "labs",
+    "smoke-test"
+  ],
+  "activationEvents": [],
+  "main": "./dist/extension.js",
+  "extensionKind": [
+    "workspace"
+  ],
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": true
+    },
+    "virtualWorkspaces": true
+  },
+  "contributes": {
+    "commands": [
+      {
+        "command": "labsPipelineSmoke.hello",
+        "title": "Hello",
+        "category": "Labs Smoke"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "labsPipelineSmoke",
+          "title": "Indrasol Labs",
+          "icon": "media/activitybar.svg"
+        }
+      ]
+    },
+    "views": {
+      "labsPipelineSmoke": [
+        {
+          "id": "labsPipelineSmoke.moreFromLabs",
+          "name": "More from Indrasol Labs"
+        }
+      ]
+    },
+    "walkthroughs": [
+      {
+        "id": "labsPipelineSmoke.getStarted",
+        "title": "Get started with Labs Pipeline Smoke Test",
+        "description": "Two steps to see the extension working.",
+        "steps": [
+          {
+            "id": "sayHello",
+            "title": "Say hello",
+            "description": "Run this extension's only command.\n[Run Labs Smoke: Hello](command:labsPipelineSmoke.hello)",
+            "media": {
+              "image": "media/icon.png",
+              "altText": "Indrasol Labs logo"
+            },
+            "completionEvents": [
+              "onCommand:labsPipelineSmoke.hello"
+            ]
+          },
+          {
+            "id": "moreFromLabs",
+            "title": "Browse more from Indrasol Labs",
+            "description": "Open the Indrasol Labs view in the activity bar.\n[Open the view](command:labsPipelineSmoke.moreFromLabs.focus)",
+            "media": {
+              "image": "media/icon.png",
+              "altText": "Indrasol Labs logo"
+            },
+            "completionEvents": [
+              "onView:labsPipelineSmoke.moreFromLabs"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "build": "node esbuild.mjs --production",
+    "watch": "node esbuild.mjs --watch",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test:unit": "vitest run --coverage",
+    "test:integration": "node esbuild.mjs --tests && vscode-test",
+    "test": "pnpm test:unit && pnpm test:integration",
+    "package": "pnpm build && vsce package --no-dependencies -o dist/"
+  },
+  "dependencies": {
+    "@indrasol/labs-core": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/mocha": "10.0.10",
+    "@types/vscode": "1.96.0",
+    "@vitest/coverage-v8": "4.1.11",
+    "@vscode/test-cli": "0.0.15",
+    "@vscode/test-electron": "3.1.0",
+    "@vscode/vsce": "3.9.2",
+    "esbuild": "0.28.2",
+    "mocha": "11.7.6"
+  }
+}
