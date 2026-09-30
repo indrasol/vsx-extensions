@@ -2,6 +2,26 @@
 
 _Append a short entry after every merged task. Newest at the top._
 
+## 2026-09-29 — security and release workflows
+
+- **Done:** `security.yml` (PRs, `main`, weekly, manual) with required-check jobs `gitleaks` (the
+  MIT-licensed CLI 8.30.1, checksum-verified, over the full history; the gitleaks Action needs a
+  license key for organization repos), `audit` (`pnpm audit` high for production, critical for all),
+  `ship-list` (`scripts/check-ship-list.mjs`, `pnpm check:ship-list`: fails on any `vsce ls` path
+  outside `dist/`, `media/`, README, CHANGELOG, LICENSE, `telemetry.json`, `package.json`) and `sbom`
+  (`scripts/sbom.mjs`, `pnpm sbom <workspace>`: CycloneDX 1.5 from `pnpm list --prod`, since
+  `cyclonedx-npm` cannot read pnpm lockfiles). `release.yml`: a `<ext>@vX.Y.Z` tag is validated by
+  `scripts/release-parse.mjs` (refuses `templates/`, version mismatch, publisher other than
+  `Indrasol`; Vitest-tested via `pnpm test:scripts`), built, tested and packaged once; the VSIX,
+  SHA-256 and SBOM are one artifact that the `marketplace-publish` environment job publishes to Open
+  VSX (token) and the Marketplace (Entra ID, `--azure-credential`), then `gh release create` attaches
+  them with the CHANGELOG section as notes. Manual `dry-run` and `profile-id` modes. Disposable
+  `extensions/labs-pipeline-smoke` 0.0.1 for the first real publish. The template's view ids are now
+  namespaced (`extensionStarter.moreFromLabs`), and Dependabot allows Vitest majors.
+  PR: https://github.com/indrasol/vsx-extensions/pull/8
+- **Next:** secrets and Azure identity for `marketplace-publish`, a dry run on `main`, then the first
+  extension scaffold.
+
 ## 2026-09-29 — extension-starter template
 
 - **Done:** `templates/extension-starter` is the golden template every extension is copied from

@@ -28,6 +28,11 @@ standard. This page is linked from every extension README. To report a vulnerabi
 - The same VSIX file is published to both registries; its SHA-256 is in the GitHub Release so
   anyone can verify what they installed (ADR-0003).
 - All changes go through pull requests on a protected `main`; `CODEOWNERS` routes every change to a maintainer.
+- `security.yml` runs on every PR, on `main` and weekly: gitleaks over the full history (the
+  MIT-licensed CLI, checksum-verified), `pnpm audit` (high for production dependencies, critical for
+  all), the `vsce ls` ship-list check (`pnpm check:ship-list`) and an SBOM per packaged extension.
+- SBOMs are CycloneDX 1.5 JSON written by `scripts/sbom.mjs` (`pnpm sbom <workspace>`) from
+  `pnpm list --prod`, because `cyclonedx-npm` cannot read pnpm lockfiles; `release.yml` reuses it.
 
 ## Program-level
 

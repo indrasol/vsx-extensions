@@ -54,15 +54,49 @@ Follow [`engineering-standards.md`](engineering-standards.md#starting-a-new-exte
 1. `cp -R templates/extension-starter extensions/<kebab-name>` (then delete any copied
    `node_modules/`, `dist/`, `out/`, `coverage/` and `.vscode-test/`).
 2. In `package.json`: set `name`, `displayName`, `description` (ends with "by Indrasol Labs"),
-   `keywords`, `repository.directory` and `homepage`; remove `"preview": true` when it is ready;
-   rename the `extensionStarter.*` command, walkthrough and the view container ids to the new
-   extension's own prefix. Keep `version` at `0.0.0` until the first release.
-3. Give each extension its own view id for the More-from-Labs view (e.g. `<camelName>.moreFromLabs`):
-   view and command ids are global in VS Code, so two installed Labs extensions must not share them.
-   Update `src/extension.ts` and the integration test to match.
+   `keywords`, `repository.directory` and `homepage`; remove `"preview": true` when it is ready.
+   Keep `version` at `0.0.0` until the first release.
+3. Rename the `extensionStarter` prefix everywhere (`package.json`, `src/extension.ts` and the
+   integration test) to the extension's own camelCase prefix: the command, walkthrough, view
+   container and More-from-Labs view (`<camelName>.moreFromLabs`) ids all use it. View and command
+   ids are global in VS Code, so two installed Labs extensions must not share them.
 4. Replace `media/icon.png` with the extension's icon, add `media/demo.gif`, and fill in every
    placeholder in `README.md`, `CHANGELOG.md` and `telemetry.json`.
 5. `pnpm install`, then `pnpm --filter <kebab-name> test` and `pnpm --filter <kebab-name> package`.
+
+## Releasing
+
+Releases happen only in CI through `.github/workflows/release.yml`; nobody publishes from a laptop.
+
+1. Bump `version` in `extensions/<name>/package.json`, add a matching `## [X.Y.Z]` section to its
+   `CHANGELOG.md` (it becomes the release notes) and merge that PR.
+2. From an up-to-date `main`, tag and push:
+
+   ```bash
+   git tag <name>@vX.Y.Z && git push origin <name>@vX.Y.Z
+   ```
+
+   The `protect-release-tags` ruleset lets only repo admins create these tags.
+
+3. The workflow refuses anything under `templates/`, a tag that does not match `package.json`
+   `version`, or a `publisher` other than `Indrasol`. It then lints, type-checks, tests, packages the
+   VSIX once and checks the ship list, SBOM and SHA-256.
+4. The `publish` job waits for a required reviewer to approve the `marketplace-publish`
+   environment. After approval the same VSIX goes to Open VSX and the VS Code Marketplace
+   (`--skip-duplicate`, so re-runs are safe), and a GitHub Release is created with the VSIX, its
+   `.sha256` and the CycloneDX SBOM.
+
+Manual runs (_Actions → Release → Run workflow_, or `gh workflow run`), on `main`:
+
+- **Dry run:** `gh workflow run release.yml -f extension=<name> -f mode=dry-run` runs every step up
+  to and including packaging, then stops. Nothing is published and no approval is needed; the
+  VSIX, SHA-256 and SBOM are uploaded as the `release-<name>-<version>` artifact.
+- **Profile id (one-time setup, ADR-0004):** `gh workflow run release.yml -f extension=<any> -f mode=profile-id`
+  signs in as the publishing managed identity (after environment approval) and prints its Azure
+  DevOps profile id, which is added as a member of the `Indrasol` Marketplace publisher.
+
+`extensions/labs-pipeline-smoke` is a disposable extension (ADR-0008) used for the first real
+publish; it is unpublished afterwards.
 
 See [`engineering-standards.md`](engineering-standards.md) before writing code and
 [`../CONTRIBUTING.md`](../CONTRIBUTING.md) for the PR workflow.

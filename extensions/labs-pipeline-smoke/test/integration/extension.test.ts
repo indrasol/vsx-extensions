@@ -1,9 +1,9 @@
 import * as assert from 'node:assert/strict';
 import * as vscode from 'vscode';
 
-const EXTENSION_ID = 'Indrasol.extension-starter';
-const HELLO_COMMAND = 'extensionStarter.hello';
-const MORE_FROM_LABS_VIEW = 'extensionStarter.moreFromLabs';
+const EXTENSION_ID = 'Indrasol.labs-pipeline-smoke';
+const HELLO_COMMAND = 'labsPipelineSmoke.hello';
+const MORE_FROM_LABS_VIEW = 'labsPipelineSmoke.moreFromLabs';
 const ACTIVATION_BUDGET_MS = 100;
 
 interface ViewContribution {
@@ -20,7 +20,7 @@ function getExtension(): vscode.Extension<unknown> {
   return ext;
 }
 
-suite('extension-starter', () => {
+suite('labs-pipeline-smoke', () => {
   test('is present', () => {
     getExtension();
   });

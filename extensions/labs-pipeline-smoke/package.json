@@ -1,8 +1,8 @@
 {
-  "name": "extension-starter",
-  "displayName": "Labs Extension Starter",
-  "description": "Template for Indrasol Labs extensions. Do not install. by Indrasol Labs",
-  "version": "0.0.0",
+  "name": "labs-pipeline-smoke",
+  "displayName": "Labs Pipeline Smoke Test",
+  "description": "Does nothing. Verifies the Indrasol Labs release pipeline. by Indrasol Labs",
+  "version": "0.0.1",
   "publisher": "Indrasol",
   "license": "MIT",
   "private": true,
@@ -15,9 +15,9 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/indrasol/vsx-extensions.git",
-    "directory": "templates/extension-starter"
+    "directory": "extensions/labs-pipeline-smoke"
   },
-  "homepage": "https://github.com/indrasol/vsx-extensions/tree/main/templates/extension-starter#readme",
+  "homepage": "https://github.com/indrasol/vsx-extensions/tree/main/extensions/labs-pipeline-smoke#readme",
   "bugs": {
     "url": "https://github.com/indrasol/vsx-extensions/issues"
   },
@@ -30,8 +30,7 @@
   "keywords": [
     "indrasol",
     "labs",
-    "template",
-    "starter"
+    "smoke-test"
   ],
   "activationEvents": [],
   "main": "./dist/extension.js",
@@ -47,56 +46,56 @@
   "contributes": {
     "commands": [
       {
-        "command": "extensionStarter.hello",
+        "command": "labsPipelineSmoke.hello",
         "title": "Hello",
-        "category": "Labs Starter"
+        "category": "Labs Smoke"
       }
     ],
     "viewsContainers": {
       "activitybar": [
         {
-          "id": "extensionStarter",
+          "id": "labsPipelineSmoke",
           "title": "Indrasol Labs",
           "icon": "media/activitybar.svg"
         }
       ]
     },
     "views": {
-      "extensionStarter": [
+      "labsPipelineSmoke": [
         {
-          "id": "extensionStarter.moreFromLabs",
+          "id": "labsPipelineSmoke.moreFromLabs",
           "name": "More from Indrasol Labs"
         }
       ]
     },
     "walkthroughs": [
       {
-        "id": "extensionStarter.getStarted",
-        "title": "Get started with Labs Extension Starter",
-        "description": "Two steps to see the template working.",
+        "id": "labsPipelineSmoke.getStarted",
+        "title": "Get started with Labs Pipeline Smoke Test",
+        "description": "Two steps to see the extension working.",
         "steps": [
           {
             "id": "sayHello",
             "title": "Say hello",
-            "description": "Run the template's only command.\n[Run Labs Starter: Hello](command:extensionStarter.hello)",
+            "description": "Run this extension's only command.\n[Run Labs Smoke: Hello](command:labsPipelineSmoke.hello)",
             "media": {
               "image": "media/icon.png",
               "altText": "Indrasol Labs logo"
             },
             "completionEvents": [
-              "onCommand:extensionStarter.hello"
+              "onCommand:labsPipelineSmoke.hello"
             ]
           },
           {
             "id": "moreFromLabs",
             "title": "Browse more from Indrasol Labs",
-            "description": "Open the Indrasol Labs view in the activity bar.\n[Open the view](command:extensionStarter.moreFromLabs.focus)",
+            "description": "Open the Indrasol Labs view in the activity bar.\n[Open the view](command:labsPipelineSmoke.moreFromLabs.focus)",
             "media": {
               "image": "media/icon.png",
               "altText": "Indrasol Labs logo"
             },
             "completionEvents": [
-              "onView:extensionStarter.moreFromLabs"
+              "onView:labsPipelineSmoke.moreFromLabs"
             ]
           }
         ]

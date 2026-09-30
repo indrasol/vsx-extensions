@@ -5,12 +5,12 @@ import { createTelemetry } from './telemetry.js';
 
 const moduleLoadedAt = performance.now();
 
-export const HELLO_COMMAND = 'extensionStarter.hello';
-export const MORE_FROM_LABS_VIEW = 'extensionStarter.moreFromLabs';
+export const HELLO_COMMAND = 'labsPipelineSmoke.hello';
+export const MORE_FROM_LABS_VIEW = 'labsPipelineSmoke.moreFromLabs';
 
 /** Keep activation under 100 ms: no I/O and no `await` before everything is registered. */
 export function activate(context: vscode.ExtensionContext): void {
-  const logger = createLogger('Labs Starter');
+  const logger = createLogger('Labs Smoke');
   const telemetry = createTelemetry(context);
   context.subscriptions.push(logger, telemetry);
 
@@ -24,7 +24,7 @@ export function activate(context: vscode.ExtensionContext): void {
   registerMoreFromLabsView(context, {
     viewId: MORE_FROM_LABS_VIEW,
     currentExtensionId: context.extension.id,
-    campaign: 'extension-starter',
+    campaign: 'labs-pipeline-smoke',
   });
 
   telemetry.activated();

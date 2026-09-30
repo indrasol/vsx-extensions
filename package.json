@@ -12,11 +12,14 @@
     "lint": "pnpm -r --if-present run lint",
     "lint:fix": "pnpm -r --if-present run lint:fix",
     "typecheck": "pnpm -r --if-present run typecheck",
-    "test": "pnpm -r --if-present run test",
+    "test": "pnpm -r --if-present run test && pnpm test:scripts",
     "build": "pnpm -r --if-present run build",
     "package": "pnpm -r --if-present run package",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "check:ship-list": "node scripts/check-ship-list.mjs",
+    "sbom": "node scripts/sbom.mjs",
+    "test:scripts": "vitest run --dir scripts"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
