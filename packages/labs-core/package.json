@@ -6,10 +6,23 @@
   "license": "MIT",
   "type": "module",
   "main": "./src/index.ts",
+  "types": "./src/index.ts",
   "scripts": {
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "typecheck": "tsc --noEmit -p tsconfig.json",
-    "test": "vitest run"
+    "test": "vitest run --coverage"
+  },
+  "peerDependencies": {
+    "vscode": "^1.96.0"
+  },
+  "peerDependenciesMeta": {
+    "vscode": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@types/vscode": "1.96.0",
+    "@vitest/coverage-v8": "4.1.11"
   }
 }

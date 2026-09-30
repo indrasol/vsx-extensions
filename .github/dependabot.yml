@@ -5,6 +5,16 @@ updates:
     schedule:
       interval: weekly
     open-pull-requests-limit: 10
+    # Majors of these are held back on purpose. The Node floor is 20.19: Vitest 5 needs Node 22.12,
+    # and @types/node must match the oldest supported Node. typescript-eslint supports
+    # TypeScript < 6.1. Minor and patch bumps stay grouped below.
+    ignore:
+      - dependency-name: vitest
+        update-types: ['version-update:semver-major']
+      - dependency-name: '@types/node'
+        update-types: ['version-update:semver-major']
+      - dependency-name: typescript
+        update-types: ['version-update:semver-major']
     groups:
       npm-minor-patch:
         update-types: [minor, patch]
