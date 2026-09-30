@@ -2,6 +2,23 @@
 
 _Append a short entry after every merged task. Newest at the top._
 
+## 2026-09-29 — extension-starter template
+
+- **Done:** `templates/extension-starter` is the golden template every extension is copied from
+  (never published, `preview: true`). esbuild bundles `src/extension.ts` with `@indrasol/labs-core`
+  from source into a 4.8 KB `dist/extension.js` (CJS, `node20`, `vscode` external). `activate`
+  registers the `extensionStarter.hello` command, the labs-core logger, no-op telemetry and the
+  `labsMoreFromLabs` view with no `await` or I/O, and logs its duration in development mode. Also
+  included: a two-step walkthrough, untrusted/virtual workspace support, an allow-list
+  `.vscodeignore`, `telemetry.json` (four events, none collected), a README with every
+  Definition-of-done section as placeholders, Keep-a-Changelog and F5 launch configs. Vitest unit test
+  (80% line gate on `src/hello.ts`) and `@vscode/test-cli` integration tests (activation < 100 ms,
+  command registered and runnable, view contributed) run on VS Code 1.96.0 and stable. `pnpm package`
+  now produces `dist/extension-starter-0.0.0.vsix` (37.5 KB); CI caches VS Code downloads. The Node
+  floor is now 22.12: `@vscode/test-electron` 3, required by current stable VS Code builds, needs
+  Node 22. PR: https://github.com/indrasol/vsx-extensions/pull/5
+- **Next:** security workflow (`security.yml`).
+
 ## 2026-09-29 — labs-core
 
 - **Done:** `packages/labs-core` is now the shared package every extension bundles from source

@@ -1,0 +1,10 @@
+# Allow-list: ship only the bundle, media and the documents below (ADR-0002).
+# Check with `pnpm exec vsce ls --no-dependencies` before every release.
+**
+!dist/extension.js
+!media/**
+!README.md
+!CHANGELOG.md
+!LICENSE
+!telemetry.json
+!package.json
