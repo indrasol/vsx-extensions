@@ -78,6 +78,28 @@ describe('More from Indrasol Labs', () => {
     }
   });
 
+  it('shows extension links first, in order, with their URLs unchanged', () => {
+    const links = [
+      { label: 'Docs', description: 'How it works', url: 'https://example.com/docs?x=1' },
+      { label: 'Contact', url: 'https://example.com/contact' },
+    ];
+    const items = buildItems({ ...opts, catalog, links });
+    expect(items.map((i) => i.label)).toEqual(['Docs', 'Contact', 'Beta', 'All extensions']);
+    expect(items.slice(0, 2).map(urlOf)).toEqual([
+      'https://example.com/docs?x=1',
+      'https://example.com/contact',
+    ]);
+    expect(items[0]?.description).toBe('How it works');
+    expect(items[1]?.description).toBe('');
+    expect(items[1]?.tooltip).toBe('Contact\nhttps://example.com/contact');
+    expect(items[1]?.accessibilityInformation?.label).toBe('Contact. Opens in browser.');
+    expect((items[0]?.iconPath as vscode.ThemeIcon).id).toBe('link-external');
+  });
+
+  it('adds no items when links is empty', () => {
+    expect(buildItems({ ...opts, catalog, links: [] })).toHaveLength(2);
+  });
+
   it('registers a tree view whose items open the URL externally', async () => {
     const ctx = createContext();
     const disposable = registerMoreFromLabsView(asContext(ctx), { ...opts, catalog });

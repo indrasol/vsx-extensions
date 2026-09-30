@@ -11,5 +11,5 @@ export type {
   TelemetryTransport,
 } from './telemetry.js';
 export { registerMoreFromLabsView } from './moreFromLabs.js';
-export type { MoreFromLabsOptions } from './moreFromLabs.js';
+export type { MoreFromLabsLink, MoreFromLabsOptions } from './moreFromLabs.js';
 export type { Catalog, CatalogEntry } from './catalog.js';

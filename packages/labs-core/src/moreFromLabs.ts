@@ -10,6 +10,17 @@ export interface MoreFromLabsOptions {
   campaign: string;
   /** Overrides the built-in catalog (tests). */
   catalog?: Catalog;
+  /**
+   * Extension-specific links shown above the catalog, in order. URLs are used as given (no UTM
+   * parameters are added), so the extension owns their exact shape.
+   */
+  links?: readonly MoreFromLabsLink[];
+}
+
+export interface MoreFromLabsLink {
+  label: string;
+  description?: string;
+  url: string;
 }
 
 /** Appends `utm_source=vscode&utm_campaign=<campaign>` to a URL. */
@@ -29,9 +40,10 @@ class LabsItem extends vscode.TreeItem {
   constructor(label: string, description: string, url: string, icon: string, commandId: string) {
     super(label, vscode.TreeItemCollapsibleState.None);
     this.description = description;
-    this.tooltip = `${label}: ${description}\n${url}`;
+    const summary = description ? `${label}, ${description}` : label;
+    this.tooltip = description ? `${label}: ${description}\n${url}` : `${label}\n${url}`;
     this.iconPath = new vscode.ThemeIcon(icon);
-    this.accessibilityInformation = { label: `${label}, ${description}. Opens in browser.` };
+    this.accessibilityInformation = { label: `${summary}. Opens in browser.` };
     this.command = { command: commandId, title: `Open ${label}`, arguments: [url] };
   }
 }
@@ -41,6 +53,10 @@ export function buildItems(opts: MoreFromLabsOptions): LabsItem[] {
   const current = opts.currentExtensionId.toLowerCase();
   const marketplace = usesMarketplace();
 
+  const links = (opts.links ?? []).map(
+    (link) =>
+      new LabsItem(link.label, link.description ?? '', link.url, 'link-external', commandId),
+  );
   const items = (opts.catalog ?? CATALOG)
     .filter((entry) => entry.id.toLowerCase() !== current)
     .map(
@@ -62,7 +78,7 @@ export function buildItems(opts: MoreFromLabsOptions): LabsItem[] {
       commandId,
     ),
   );
-  return items;
+  return [...links, ...items];
 }
 
 /** Registers the "More from Indrasol Labs" tree view. Disposed with the extension context. */
