@@ -16,7 +16,9 @@
     "build": "pnpm -r --if-present run build",
     "package": "pnpm -r --if-present run package",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "check:ship-list": "node scripts/check-ship-list.mjs",
+    "sbom": "node scripts/sbom.mjs"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",

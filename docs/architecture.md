@@ -33,15 +33,15 @@ package time (ADR-0002).
 
 ## 2. Security controls (all free on a public repo)
 
-| Control                                                           | Where                                                         | Status              |
-| ----------------------------------------------------------------- | ------------------------------------------------------------- | ------------------- |
-| CodeQL (JS/TS)                                                    | GitHub _default setup_, no workflow file                      | enable in setup 0.2 |
-| Secret scanning + push protection                                 | GitHub repo settings                                          | enable in setup 0.2 |
-| Dependabot alerts + security updates                              | GitHub repo settings                                          | enable in setup 0.2 |
-| gitleaks, `pnpm audit`, SBOM, ship-list check                     | `security.yml`                                                | prompt 04           |
-| Branch ruleset `protect-main`, tag ruleset `protect-release-tags` | GitHub Rules                                                  | setup 0.2           |
-| Human approval on publish                                         | GitHub environment `marketplace-publish` (required reviewers) | setup 0.2           |
-| CODEOWNERS security review on release/labs-core/deps              | `CODEOWNERS`                                                  | in repo             |
+| Control                                                           | Where                                                         | Status                 |
+| ----------------------------------------------------------------- | ------------------------------------------------------------- | ---------------------- |
+| CodeQL (JS/TS)                                                    | GitHub _default setup_, no workflow file                      | enable in setup 0.2    |
+| Secret scanning + push protection                                 | GitHub repo settings                                          | enable in setup 0.2    |
+| Dependabot alerts + security updates                              | GitHub repo settings                                          | enable in setup 0.2    |
+| gitleaks, `pnpm audit`, SBOM, ship-list check                     | `security.yml`                                                | security.yml (in repo) |
+| Branch ruleset `protect-main`, tag ruleset `protect-release-tags` | GitHub Rules                                                  | setup 0.2              |
+| Human approval on publish                                         | GitHub environment `marketplace-publish` (required reviewers) | setup 0.2              |
+| CODEOWNERS security review on release/labs-core/deps              | `CODEOWNERS`                                                  | in repo                |
 
 ## 3. Release pipeline
 
