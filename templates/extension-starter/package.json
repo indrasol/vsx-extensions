@@ -55,16 +55,16 @@
     "viewsContainers": {
       "activitybar": [
         {
-          "id": "labsStarter",
+          "id": "extensionStarter",
           "title": "Indrasol Labs",
           "icon": "media/activitybar.svg"
         }
       ]
     },
     "views": {
-      "labsStarter": [
+      "extensionStarter": [
         {
-          "id": "labsMoreFromLabs",
+          "id": "extensionStarter.moreFromLabs",
           "name": "More from Indrasol Labs"
         }
       ]
@@ -90,13 +90,13 @@
           {
             "id": "moreFromLabs",
             "title": "Browse more from Indrasol Labs",
-            "description": "Open the Indrasol Labs view in the activity bar.\n[Open the view](command:labsMoreFromLabs.focus)",
+            "description": "Open the Indrasol Labs view in the activity bar.\n[Open the view](command:extensionStarter.moreFromLabs.focus)",
             "media": {
               "image": "media/icon.png",
               "altText": "Indrasol Labs logo"
             },
             "completionEvents": [
-              "onView:labsMoreFromLabs"
+              "onView:extensionStarter.moreFromLabs"
             ]
           }
         ]

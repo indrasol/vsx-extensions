@@ -54,12 +54,12 @@ Follow [`engineering-standards.md`](engineering-standards.md#starting-a-new-exte
 1. `cp -R templates/extension-starter extensions/<kebab-name>` (then delete any copied
    `node_modules/`, `dist/`, `out/`, `coverage/` and `.vscode-test/`).
 2. In `package.json`: set `name`, `displayName`, `description` (ends with "by Indrasol Labs"),
-   `keywords`, `repository.directory` and `homepage`; remove `"preview": true` when it is ready;
-   rename the `extensionStarter.*` command, walkthrough and the view container ids to the new
-   extension's own prefix. Keep `version` at `0.0.0` until the first release.
-3. Give each extension its own view id for the More-from-Labs view (e.g. `<camelName>.moreFromLabs`):
-   view and command ids are global in VS Code, so two installed Labs extensions must not share them.
-   Update `src/extension.ts` and the integration test to match.
+   `keywords`, `repository.directory` and `homepage`; remove `"preview": true` when it is ready.
+   Keep `version` at `0.0.0` until the first release.
+3. Rename the `extensionStarter` prefix everywhere (`package.json`, `src/extension.ts` and the
+   integration test) to the extension's own camelCase prefix: the command, walkthrough, view
+   container and More-from-Labs view (`<camelName>.moreFromLabs`) ids all use it. View and command
+   ids are global in VS Code, so two installed Labs extensions must not share them.
 4. Replace `media/icon.png` with the extension's icon, add `media/demo.gif`, and fill in every
    placeholder in `README.md`, `CHANGELOG.md` and `telemetry.json`.
 5. `pnpm install`, then `pnpm --filter <kebab-name> test` and `pnpm --filter <kebab-name> package`.

@@ -6,7 +6,7 @@ import { createTelemetry } from './telemetry.js';
 const moduleLoadedAt = performance.now();
 
 export const HELLO_COMMAND = 'extensionStarter.hello';
-export const MORE_FROM_LABS_VIEW = 'labsMoreFromLabs';
+export const MORE_FROM_LABS_VIEW = 'extensionStarter.moreFromLabs';
 
 /** Keep activation under 100 ms: no I/O and no `await` before everything is registered. */
 export function activate(context: vscode.ExtensionContext): void {

@@ -3,7 +3,7 @@ import * as vscode from 'vscode';
 
 const EXTENSION_ID = 'Indrasol.extension-starter';
 const HELLO_COMMAND = 'extensionStarter.hello';
-const MORE_FROM_LABS_VIEW = 'labsMoreFromLabs';
+const MORE_FROM_LABS_VIEW = 'extensionStarter.moreFromLabs';
 const ACTIVATION_BUDGET_MS = 100;
 
 interface ViewContribution {
