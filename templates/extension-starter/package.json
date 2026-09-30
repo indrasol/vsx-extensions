@@ -1,0 +1,130 @@
+{
+  "name": "extension-starter",
+  "displayName": "Labs Extension Starter",
+  "description": "Template for Indrasol Labs extensions. Do not install. by Indrasol Labs",
+  "version": "0.0.0",
+  "publisher": "Indrasol",
+  "license": "MIT",
+  "private": true,
+  "preview": true,
+  "icon": "media/icon.png",
+  "galleryBanner": {
+    "color": "#0B1F3A",
+    "theme": "dark"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/indrasol/vsx-extensions.git",
+    "directory": "templates/extension-starter"
+  },
+  "homepage": "https://github.com/indrasol/vsx-extensions/tree/main/templates/extension-starter#readme",
+  "bugs": {
+    "url": "https://github.com/indrasol/vsx-extensions/issues"
+  },
+  "engines": {
+    "vscode": "^1.96.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "indrasol",
+    "labs",
+    "template",
+    "starter"
+  ],
+  "activationEvents": [],
+  "main": "./dist/extension.js",
+  "extensionKind": [
+    "workspace"
+  ],
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": true
+    },
+    "virtualWorkspaces": true
+  },
+  "contributes": {
+    "commands": [
+      {
+        "command": "extensionStarter.hello",
+        "title": "Hello",
+        "category": "Labs Starter"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "labsStarter",
+          "title": "Indrasol Labs",
+          "icon": "media/activitybar.svg"
+        }
+      ]
+    },
+    "views": {
+      "labsStarter": [
+        {
+          "id": "labsMoreFromLabs",
+          "name": "More from Indrasol Labs"
+        }
+      ]
+    },
+    "walkthroughs": [
+      {
+        "id": "extensionStarter.getStarted",
+        "title": "Get started with Labs Extension Starter",
+        "description": "Two steps to see the template working.",
+        "steps": [
+          {
+            "id": "sayHello",
+            "title": "Say hello",
+            "description": "Run the template's only command.\n[Run Labs Starter: Hello](command:extensionStarter.hello)",
+            "media": {
+              "image": "media/icon.png",
+              "altText": "Indrasol Labs logo"
+            },
+            "completionEvents": [
+              "onCommand:extensionStarter.hello"
+            ]
+          },
+          {
+            "id": "moreFromLabs",
+            "title": "Browse more from Indrasol Labs",
+            "description": "Open the Indrasol Labs view in the activity bar.\n[Open the view](command:labsMoreFromLabs.focus)",
+            "media": {
+              "image": "media/icon.png",
+              "altText": "Indrasol Labs logo"
+            },
+            "completionEvents": [
+              "onView:labsMoreFromLabs"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "build": "node esbuild.mjs --production",
+    "watch": "node esbuild.mjs --watch",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test:unit": "vitest run --coverage",
+    "test:integration": "node esbuild.mjs --tests && vscode-test",
+    "test": "pnpm test:unit && pnpm test:integration",
+    "package": "pnpm build && vsce package --no-dependencies -o dist/"
+  },
+  "dependencies": {
+    "@indrasol/labs-core": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/mocha": "10.0.10",
+    "@types/vscode": "1.96.0",
+    "@vitest/coverage-v8": "4.1.11",
+    "@vscode/test-cli": "0.0.15",
+    "@vscode/test-electron": "3.1.0",
+    "@vscode/vsce": "3.9.2",
+    "esbuild": "0.28.2",
+    "mocha": "11.7.6"
+  }
+}
