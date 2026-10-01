@@ -13,20 +13,17 @@ vsx-extensions/
 │   ├── workflows/
 │   │   ├── ci.yml               every PR: lint → typecheck → test (xvfb) → package; uploads .vsix
 │   │   ├── security.yml         PR + weekly: gitleaks, pnpm audit, CycloneDX SBOM, vsce ls allow-list
-│   │   ├── release.yml          tag <ext>@vX.Y.Z → build → package once → publish both registries → GitHub Release
-│   │   └── metrics-collect.yml  daily cron → collector → Supabase
+│   │   └── release.yml          tag <ext>@vX.Y.Z → build → package once → publish both registries → GitHub Release
 │   ├── ISSUE_TEMPLATE/ · pull_request_template.md · dependabot.yml
 ├── .vscode/                     shared editor settings + recommended extensions
 ├── docs/                        architecture, engineering-standards, security-practices, development, PROGRESS, adr/, specs/
 ├── templates/extension-starter/ golden template (copied for every new extension)
 ├── packages/labs-core/          shared, bundled from source: logger, telemetry wrapper (no-op sender in v1), "More from Labs" view
-├── extensions/<name>/           one workspace per published extension
-├── collector/                   Node/TS: registries + GitHub → Supabase (service-role key, CI only)
-├── supabase/migrations/         SQL schema for metrics
-└── dashboard/                   Vite + React one-pager, Netlify
+└── extensions/<name>/           one workspace per published extension
 ```
 
-Workspaces: `extensions/*`, `packages/*`, `templates/*`, `collector`, `dashboard`.
+Workspaces: `extensions/*`, `packages/*`, `templates/*`. The metrics collector, dashboard and
+lead-capture site live outside this repository (ADR-0013).
 Each extension is bundled by esbuild into `dist/extension.js` and packaged with
 `vsce package --no-dependencies`, so `node_modules` layout under pnpm never matters at
 package time (ADR-0002).
@@ -63,24 +60,22 @@ trusting `repo:indrasol/vsx-extensions:environment:marketplace-publish`; it is a
 on the `Indrasol` Marketplace publisher (ADR-0004). Open VSX uses a namespace access token
 stored as an environment secret. No PATs.
 
-## 4. Metrics data pipeline (Phase 4)
+## 4. Metrics and links (outside this repository)
 
 ```
-GitHub Actions cron 02:00 UTC ─ collector ─┬─ Marketplace gallery API (extensionquery, statistics)
-                                            ├─ Open VSX API  GET /api/Indrasol/<ext>
-                                            └─ GitHub API    repo, issues by label ext:<name>, traffic (14-day window)
-                                                       │
-                                                       ▼   (service-role key, GitHub secret only)
-                                          Supabase Postgres: extensions, registry_snapshots,
-                                          github_snapshots, releases, usage_events (v2)
-                                                       │  RLS: select only for @indrasol.com JWTs
-                                                       ▼
-                             Netlify ← dashboard/ (Vite + React, supabase-js, anon key, Azure sign-in)
-Extensions (v2, opt-in telemetry) → Supabase Edge Function /ingest → usage_events
+User clicks a link in an extension ─► labs.indrasol.com/go/<ext>/<placement> ─► redirect
+                                         (click counted: no IP, cookie or user-agent string)
+Scheduled Supabase Edge Functions ─┬─ Marketplace gallery API (extensionquery, statistics)
+                                   ├─ Open VSX API  GET /api/Indrasol/<ext>
+                                   └─ GitHub API    repo, traffic (14-day window)
+                                              ▼
+                                   Supabase Postgres (RLS) ◄─ internal dashboard (Netlify, Entra sign-in)
 ```
 
-All registry numbers are cumulative, so the collector snapshots daily and the dashboard views
-compute deltas. The schema lives in `supabase/migrations/`.
+Extensions send no telemetry and never call these services; only a user's click opens a link.
+The collector, dashboard and site are maintained in Indrasol's private planning repository
+(ADR-0013, superseding the location part of ADR-0007). Registry numbers are cumulative, so the
+collector snapshots daily and the dashboard computes deltas.
 
 ## 5. How work lands
 

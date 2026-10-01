@@ -2,8 +2,6 @@ packages:
   - 'extensions/*'
   - 'packages/*'
   - 'templates/*'
-  - 'collector'
-  - 'dashboard'
 
 # `vscode` is provided by the editor at runtime (labs-core declares it as an optional peer). The npm
 # package of that name is an unrelated, deprecated one: never install it, even as an auto-installed peer.

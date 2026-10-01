@@ -22,8 +22,6 @@ review everything as humans: see [how we build](docs/how-we-build.md). See
 extensions/      one folder per published extension
 packages/        labs-core (shared telemetry, logger, "More from Labs" view)
 templates/       extension-starter, the golden template every extension copies
-collector/       daily metrics collector (registries + GitHub → Supabase)
-dashboard/       internal metrics dashboard (Vite + React, Netlify)
 docs/            architecture, engineering standards, security practices, ADRs, specs, progress log
 ```
 

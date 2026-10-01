@@ -1,6 +1,6 @@
 # ADR 0007 — Metrics stack: GitHub Actions cron → Supabase Postgres → Vite/React on Netlify
 
-- **Status:** Accepted
+- **Status:** Superseded in part by ADR-0013
 - **Date:** 2026-09-27
 
 ## Context
