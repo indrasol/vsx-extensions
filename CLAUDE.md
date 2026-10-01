@@ -6,8 +6,8 @@ Repo: `github.com/indrasol/vsx-extensions` (public).
 
 ## Stack
 
-TypeScript (strict) · esbuild · pnpm workspaces · @vscode/test-cli · GitHub Actions ·
-Supabase (metrics) · Vite + React on Netlify (dashboard)
+TypeScript (strict) · esbuild · pnpm workspaces · @vscode/test-cli · GitHub Actions.
+Metrics, dashboard and the links site live outside this repo (ADR-0013).
 
 ## Hard rules
 
