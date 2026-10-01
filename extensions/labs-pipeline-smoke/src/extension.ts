@@ -8,8 +8,15 @@ const moduleLoadedAt = performance.now();
 export const HELLO_COMMAND = 'labsPipelineSmoke.hello';
 export const MORE_FROM_LABS_VIEW = 'labsPipelineSmoke.moreFromLabs';
 
+/** Returned from `activate()`. Test-only: the integration test asserts the activation budget on it. */
+export interface ExtensionApi {
+  /** Time spent inside `activate()`, from its first line to the end of registration, in ms. */
+  readonly activationMs: number;
+}
+
 /** Keep activation under 100 ms: no I/O and no `await` before everything is registered. */
-export function activate(context: vscode.ExtensionContext): void {
+export function activate(context: vscode.ExtensionContext): ExtensionApi {
+  const activateStartedAt = performance.now();
   const logger = createLogger('Labs Smoke');
   const telemetry = createTelemetry(context);
   context.subscriptions.push(logger, telemetry);
@@ -28,10 +35,13 @@ export function activate(context: vscode.ExtensionContext): void {
   });
 
   telemetry.activated();
+  const activationMs = performance.now() - activateStartedAt;
 
   if (context.extensionMode === vscode.ExtensionMode.Development) {
     logger.info(`Activated in ${(performance.now() - moduleLoadedAt).toFixed(1)} ms`);
   }
+
+  return { activationMs };
 }
 
 export function deactivate(): void {
