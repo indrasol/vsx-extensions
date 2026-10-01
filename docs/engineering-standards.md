@@ -50,8 +50,9 @@ extension-starter/
 - **No network calls by default.** Any network feature is opt-in, uses HTTPS and is documented in the README.
 - Secrets and tokens only in `context.secrets` (SecretStorage), never in settings or files.
 - Respect Workspace Trust: disable anything that executes workspace code in untrusted workspaces.
-- Performance budget: activation under 100 ms, VSIX under 1 MB where possible
-  (measure with _Developer: Show Running Extensions_).
+- Performance budget: activation under 100 ms (time spent inside `activate()`, which returns it as
+  `activationMs` for the integration test to assert; cold bundle loading is not counted), VSIX under
+  1 MB where possible (measure with _Developer: Show Running Extensions_).
 - Accessibility: every UI element has a keyboard path and an ARIA label and works in high-contrast themes.
 - Tests: ≥ 70% coverage of core logic, plus at least one integration test that activates the extension.
 
