@@ -1,0 +1,20 @@
+# Allow-list: ship only the bundle, media and the documents below (ADR-0002).
+# Check with `pnpm exec vsce ls --no-dependencies` before every release.
+**
+!dist/extension.js
+!dist/worker.js
+# The local MCP server, started by the user's agent config (README: Works with your AI agent).
+!dist/mcp-server.js
+# Media by name: vsce lets any `!` pattern win over an exclusion, so a broad `!media/**` would
+# also ship the development source map (media/webview.js.map).
+!media/icon.png
+!media/activitybar.svg
+!media/webview.js
+!media/webview.css
+!README.md
+!CHANGELOG.md
+!LICENSE
+# Licences of the bundled third-party code (scripts/third-party-notices.mjs, run by `pnpm build`).
+!ThirdPartyNotices.txt
+!telemetry.json
+!package.json

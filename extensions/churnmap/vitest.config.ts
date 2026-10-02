@@ -1,0 +1,56 @@
+import { defineConfig } from 'vitest/config';
+
+export default defineConfig({
+  test: {
+    include: ['test/unit/**/*.test.ts'],
+    // The verbose reporter keeps the console output of passing tests, where perf tests print
+    // their measured timings.
+    reporters: ['verbose'],
+    coverage: {
+      provider: 'v8',
+      include: [
+        'src/commands.ts',
+        'mcp/src/args.ts',
+        'mcp/src/repo.ts',
+        'mcp/src/scope.ts',
+        'mcp/src/settings.ts',
+        'mcp/src/tools.ts',
+        'src/ai/agentContext.ts',
+        'src/ai/agentNotes.ts',
+        'src/ai/brief.ts',
+        'src/ai/chat.ts',
+        'src/ai/mcpConfig.ts',
+        'src/ai/nudgeClock.ts',
+        'src/ai/writers.ts',
+        'src/links.ts',
+        'src/openFile.ts',
+        'src/repoChoice.ts',
+        'src/panel/hotspotTree.ts',
+        'src/panel/ignore.ts',
+        'src/panel/markdown.ts',
+        'src/analysis/**/*.ts',
+        'src/city/**/*.ts',
+        'src/export/flow.ts',
+        'src/export/labels.ts',
+        'src/shared/**/*.ts',
+        'src/daily/format.ts',
+        'src/warmStart.ts',
+        // The webview's pure modules (the DOM and three.js parts run in the integration tests).
+        'webview/animation.ts',
+        'webview/camera.ts',
+        'webview/gridIndex.ts',
+        'webview/labelLayout.ts',
+        'webview/motion.ts',
+        'webview/picking.ts',
+        'webview/quality.ts',
+        'webview/safeArea.ts',
+        'webview/text.ts',
+        'webview/tween.ts',
+        'webview/viewport2d.ts',
+      ],
+      exclude: ['src/analysis/worker.ts'],
+      reporter: ['text'],
+      thresholds: { lines: 80 },
+    },
+  },
+});

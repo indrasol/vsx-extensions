@@ -1,0 +1,2 @@
+# Text files are LF on every OS (Windows checkouts included): tests compare file contents.
+* text=auto eol=lf

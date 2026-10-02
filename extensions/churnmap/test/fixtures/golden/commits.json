@@ -1,0 +1,452 @@
+[
+  {
+    "sha": "0000000000000000000000000000000000000001",
+    "authorName": "Alice",
+    "authorEmail": "alice@example.com",
+    "timestamp": 1789913600,
+    "subject": "Invoice: credit notes",
+    "files": [
+      {
+        "path": "src/billing/invoice.ts",
+        "added": 40,
+        "deleted": 10,
+        "binary": false
+      }
+    ]
+  },
+  {
+    "sha": "0000000000000000000000000000000000000002",
+    "authorName": "Alice",
+    "authorEmail": "alice@example.com",
+    "timestamp": 1789827200,
+    "subject": "Invoice: discounts",
+    "files": [
+      {
+        "path": "src/billing/invoice.ts",
+        "added": 90,
+        "deleted": 10,
+        "binary": false
+      }
+    ]
+  },
+  {
+    "sha": "0000000000000000000000000000000000000003",
+    "authorName": "Alice",
+    "authorEmail": "alice@example.com",
+    "timestamp": 1789740800,
+    "subject": "Invoice: currency",
+    "files": [
+      {
+        "path": "src/billing/invoice.ts",
+        "added": 120,
+        "deleted": 30,
+        "binary": false
+      }
+    ]
+  },
+  {
+    "sha": "0000000000000000000000000000000000000004",
+    "authorName": "Carol",
+    "authorEmail": "carol@example.com",
+    "timestamp": 1789740800,
+    "subject": "Config: timeouts",
+    "files": [
+      {
+        "path": "src/config.ts",
+        "added": 3,
+        "deleted": 1,
+        "binary": false
+      }
+    ]
+  },
+  {
+    "sha": "0000000000000000000000000000000000000005",
+    "authorName": "Carol",
+    "authorEmail": "carol@example.com",
+    "timestamp": 1789654400,
+    "subject": "Config: retries",
+    "files": [
+      {
+        "path": "src/config.ts",
+        "added": 3,
+        "deleted": 1,
+        "binary": false
+      }
+    ]
+  },
+  {
+    "sha": "0000000000000000000000000000000000000006",
+    "authorName": "Alice",
+    "authorEmail": "alice@example.com",
+    "timestamp": 1789568000,
+    "subject": "Invoice: split lines",
+    "files": [
+      {
+        "path": "src/billing/invoice.ts",
+        "added": 80,
+        "deleted": 20,
+        "binary": false
+      }
+    ]
+  },
+  {
+    "sha": "0000000000000000000000000000000000000007",
+    "authorName": "Bob",
+    "authorEmail": "bob@example.com",
+    "timestamp": 1789568000,
+    "subject": "Docs: setup guide",
+    "files": [
+      {
+        "path": "docs/setup.md",
+        "added": 10,
+        "deleted": 0,
+        "binary": false
+      }
+    ]
+  },
+  {
+    "sha": "0000000000000000000000000000000000000008",
+    "authorName": "Carol",
+    "authorEmail": "carol@example.com",
+    "timestamp": 1789481600,
+    "subject": "Config: defaults",
+    "files": [
+      {
+        "path": "src/config.ts",
+        "added": 3,
+        "deleted": 1,
+        "binary": false
+      }
+    ]
+  },
+  {
+    "sha": "0000000000000000000000000000000000000009",
+    "authorName": "Dave",
+    "authorEmail": "dave@example.com",
+    "timestamp": 1789395200,
+    "subject": "Logo: refresh",
+    "files": [
+      {
+        "path": "media/logo.png",
+        "added": 0,
+        "deleted": 0,
+        "binary": true
+      }
+    ]
+  },
+  {
+    "sha": "000000000000000000000000000000000000000a",
+    "authorName": "Alice",
+    "authorEmail": "alice@example.com",
+    "timestamp": 1789308800,
+    "subject": "Invoice: PDF export",
+    "files": [
+      {
+        "path": "src/billing/invoice.ts",
+        "added": 150,
+        "deleted": 30,
+        "binary": false
+      }
+    ]
+  },
+  {
+    "sha": "000000000000000000000000000000000000000b",
+    "authorName": "Dave",
+    "authorEmail": "dave@example.com",
+    "timestamp": 1789222400,
+    "subject": "Logo: dark variant",
+    "files": [
+      {
+        "path": "media/logo.png",
+        "added": 0,
+        "deleted": 0,
+        "binary": true
+      }
+    ]
+  },
+  {
+    "sha": "000000000000000000000000000000000000000c",
+    "authorName": "Alice",
+    "authorEmail": "alice@example.com",
+    "timestamp": 1789136000,
+    "subject": "Invoice: totals",
+    "files": [
+      {
+        "path": "src/billing/invoice.ts",
+        "added": 100,
+        "deleted": 20,
+        "binary": false
+      }
+    ]
+  },
+  {
+    "sha": "000000000000000000000000000000000000000d",
+    "authorName": "Alice",
+    "authorEmail": "alice@example.com",
+    "timestamp": 1789136000,
+    "subject": "Tax: regional rates",
+    "files": [
+      {
+        "path": "src/billing/tax.ts",
+        "added": 70,
+        "deleted": 30,
+        "binary": false
+      }
+    ]
+  },
+  {
+    "sha": "000000000000000000000000000000000000000e",
+    "authorName": "Alice",
+    "authorEmail": "alice@example.com",
+    "timestamp": 1788963200,
+    "subject": "Merge branch 'feature/tax'",
+    "files": []
+  },
+  {
+    "sha": "000000000000000000000000000000000000000f",
+    "authorName": "Bob",
+    "authorEmail": "bob@example.com",
+    "timestamp": 1788704000,
+    "subject": "fix: tax rounding",
+    "files": [
+      {
+        "path": "src/billing/tax.ts",
+        "added": 50,
+        "deleted": 30,
+        "binary": false
+      }
+    ]
+  },
+  {
+    "sha": "0000000000000000000000000000000000000010",
+    "authorName": "Alice",
+    "authorEmail": "alice@example.com",
+    "timestamp": 1788272000,
+    "subject": "Tax: move into billing",
+    "files": [
+      {
+        "path": "src/billing/tax.ts",
+        "added": 40,
+        "deleted": 20,
+        "binary": false,
+        "renamedFrom": "src/legacy/tax_old.ts"
+      }
+    ]
+  },
+  {
+    "sha": "0000000000000000000000000000000000000011",
+    "authorName": "Alice",
+    "authorEmail": "alice@example.com",
+    "timestamp": 1787840000,
+    "subject": "Tax: first version",
+    "files": [
+      {
+        "path": "src/legacy/tax_old.ts",
+        "added": 60,
+        "deleted": 0,
+        "binary": false
+      }
+    ]
+  },
+  {
+    "sha": "0000000000000000000000000000000000000012",
+    "authorName": "Alice",
+    "authorEmail": "alice@example.com",
+    "timestamp": 1787408000,
+    "subject": "Routes: add v2",
+    "files": [
+      {
+        "path": "src/api/routes.ts",
+        "added": 30,
+        "deleted": 10,
+        "binary": false
+      }
+    ]
+  },
+  {
+    "sha": "0000000000000000000000000000000000000013",
+    "authorName": "Bob",
+    "authorEmail": "bob@example.com",
+    "timestamp": 1786544000,
+    "subject": "fix: route params",
+    "files": [
+      {
+        "path": "src/api/routes.ts",
+        "added": 20,
+        "deleted": 10,
+        "binary": false
+      }
+    ]
+  },
+  {
+    "sha": "0000000000000000000000000000000000000014",
+    "authorName": "Carol",
+    "authorEmail": "carol@example.com",
+    "timestamp": 1785680000,
+    "subject": "Routes: tidy",
+    "files": [
+      {
+        "path": "src/api/routes.ts",
+        "added": 25,
+        "deleted": 5,
+        "binary": false
+      }
+    ]
+  },
+  {
+    "sha": "0000000000000000000000000000000000000015",
+    "authorName": "Alice",
+    "authorEmail": "alice@example.com",
+    "timestamp": 1785248000,
+    "subject": "fix: table sort",
+    "files": [
+      {
+        "path": "src/ui/table.tsx",
+        "added": 5,
+        "deleted": 5,
+        "binary": false
+      }
+    ]
+  },
+  {
+    "sha": "0000000000000000000000000000000000000016",
+    "authorName": "Bob",
+    "authorEmail": "bob@example.com",
+    "timestamp": 1784816000,
+    "subject": "bug: header overlap",
+    "files": [
+      {
+        "path": "src/ui/table.tsx",
+        "added": 5,
+        "deleted": 5,
+        "binary": false
+      }
+    ]
+  },
+  {
+    "sha": "0000000000000000000000000000000000000017",
+    "authorName": "Carol",
+    "authorEmail": "carol@example.com",
+    "timestamp": 1784384000,
+    "subject": "Table: sticky header",
+    "files": [
+      {
+        "path": "src/ui/table.tsx",
+        "added": 5,
+        "deleted": 5,
+        "binary": false
+      }
+    ]
+  },
+  {
+    "sha": "0000000000000000000000000000000000000018",
+    "authorName": "Dave",
+    "authorEmail": "dave@example.com",
+    "timestamp": 1783952000,
+    "subject": "Table: paging",
+    "files": [
+      {
+        "path": "src/ui/table.tsx",
+        "added": 5,
+        "deleted": 5,
+        "binary": false
+      }
+    ]
+  },
+  {
+    "sha": "0000000000000000000000000000000000000019",
+    "authorName": "Alice",
+    "authorEmail": "alice@example.com",
+    "timestamp": 1783520000,
+    "subject": "fix: dark theme contrast",
+    "files": [
+      {
+        "path": "src/ui/theme.ts",
+        "added": 10,
+        "deleted": 10,
+        "binary": false
+      }
+    ]
+  },
+  {
+    "sha": "000000000000000000000000000000000000001a",
+    "authorName": "Bob",
+    "authorEmail": "bob@example.com",
+    "timestamp": 1783260800,
+    "subject": "hotfix: theme crash",
+    "files": [
+      {
+        "path": "src/ui/theme.ts",
+        "added": 10,
+        "deleted": 10,
+        "binary": false
+      }
+    ]
+  },
+  {
+    "sha": "000000000000000000000000000000000000001b",
+    "authorName": "Carol",
+    "authorEmail": "carol@example.com",
+    "timestamp": 1783088000,
+    "subject": "revert: theme tokens",
+    "files": [
+      {
+        "path": "src/ui/theme.ts",
+        "added": 10,
+        "deleted": 10,
+        "binary": false
+      }
+    ]
+  },
+  {
+    "sha": "000000000000000000000000000000000000001c",
+    "authorName": "Dave",
+    "authorEmail": "dave@example.com",
+    "timestamp": 1782742400,
+    "subject": "Theme: new palette",
+    "files": [
+      {
+        "path": "src/ui/theme.ts",
+        "added": 10,
+        "deleted": 10,
+        "binary": false
+      }
+    ]
+  },
+  {
+    "sha": "000000000000000000000000000000000000001d",
+    "authorName": "Erin",
+    "authorEmail": "erin@example.com",
+    "timestamp": 1782396800,
+    "subject": "Theme: spacing scale",
+    "files": [
+      {
+        "path": "src/ui/theme.ts",
+        "added": 10,
+        "deleted": 10,
+        "binary": false
+      }
+    ]
+  },
+  {
+    "sha": "000000000000000000000000000000000000001e",
+    "authorName": "Alice",
+    "authorEmail": "alice@example.com",
+    "timestamp": 1779632000,
+    "subject": "fix: old invoice bug",
+    "files": [
+      {
+        "path": "src/billing/invoice.ts",
+        "added": 5,
+        "deleted": 5,
+        "binary": false
+      },
+      {
+        "path": "src/removed.ts",
+        "added": 10,
+        "deleted": 0,
+        "binary": false
+      }
+    ]
+  }
+]

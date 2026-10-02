@@ -1,10 +1,13 @@
 #!/usr/bin/env node
 // Writes a minimal CycloneDX 1.5 SBOM of a workspace's production dependencies (what esbuild
 // bundles into the VSIX). cyclonedx-npm cannot read pnpm lockfiles, so this converts `pnpm list`.
+// Packages esbuild bundles from devDependencies are invisible to `pnpm list --prod`; a workspace
+// whose build writes `dist/bundle-inputs.json` (every input file of its shipped bundles, from
+// esbuild's metafiles) gets those added as direct dependencies of the extension.
 // Usage: node scripts/sbom.mjs <workspace> [--out <file>]   (default: <workspace>/dist/sbom.cdx.json)
 import { execFileSync } from 'node:child_process';
 import { randomUUID } from 'node:crypto';
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, realpathSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { ROOT, findWorkspace } from './workspaces.mjs';
 
@@ -78,6 +81,39 @@ const rootRef = purl(workspace.name, workspace.manifest.version);
 dependencies.set(rootRef, new Set());
 walk(tree.dependencies, rootRef);
 
+/** The package folder (relative to the workspace) a bundled input file belongs to, if any. */
+function packageDirOf(input) {
+  const match = /^(.*node_modules\/(?:@[^/]+\/)?[^/]+)\//.exec(input.replace(/\\/g, '/'));
+  return match?.[1];
+}
+
+const bundleInputs = join(workspace.dir, 'dist', 'bundle-inputs.json');
+let bundled = 0;
+if (existsSync(bundleInputs)) {
+  const seen = new Set();
+  for (const input of JSON.parse(readFileSync(bundleInputs, 'utf8'))) {
+    const dir = packageDirOf(input);
+    if (!dir) continue;
+    const real = realpathSync(resolve(workspace.dir, dir));
+    if (seen.has(real)) continue;
+    seen.add(real);
+    const manifest = JSON.parse(readFileSync(join(real, 'package.json'), 'utf8'));
+    const ref = purl(manifest.name, manifest.version);
+    dependencies.get(rootRef).add(ref);
+    if (components.has(ref)) continue;
+    bundled += 1;
+    components.set(ref, {
+      type: 'library',
+      'bom-ref': ref,
+      ...nameParts(manifest.name),
+      version: manifest.version,
+      purl: ref,
+      licenses: licenses(manifest.license),
+    });
+    dependencies.set(ref, new Set());
+  }
+}
+
 const bom = {
   bomFormat: 'CycloneDX',
   specVersion: '1.5',
@@ -101,4 +137,6 @@ const bom = {
 
 mkdirSync(dirname(outFile), { recursive: true });
 writeFileSync(outFile, `${JSON.stringify(bom, null, 2)}\n`);
-console.log(`Wrote ${outFile} (${String(bom.components.length)} components)`);
+console.log(
+  `Wrote ${outFile} (${String(bom.components.length)} components, ${String(bundled)} of them bundled from devDependencies)`,
+);

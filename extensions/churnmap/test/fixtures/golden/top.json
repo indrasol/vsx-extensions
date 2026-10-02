@@ -1,0 +1,90 @@
+[
+  {
+    "rank": 1,
+    "path": "src/billing/invoice.ts",
+    "score": 80,
+    "commits": 6,
+    "authors": 1,
+    "relChurn": 5,
+    "frequency": 5.403,
+    "fixRatio": 0,
+    "owners": ["Alice"],
+    "band": "hotspot",
+    "reasons": [
+      "Rewritten about 7× in 90 days (700 lines added or removed vs 100 lines today)",
+      "Changed 6 times in 90 days (more often than 99% of files)",
+      "Deeply nested code (depth 6) (deeper than 99% of files)"
+    ],
+    "trend": "unknown"
+  },
+  {
+    "rank": 2,
+    "path": "src/billing/tax.ts",
+    "score": 65,
+    "commits": 4,
+    "authors": 2,
+    "relChurn": 3,
+    "frequency": 2.732,
+    "fixRatio": 0.25,
+    "owners": ["Alice", "Bob"],
+    "band": "hotspot",
+    "reasons": [
+      "Rewritten about 3× in 90 days (300 lines added or removed vs 100 lines today)",
+      "Changed 4 times in 90 days (more often than 75% of files)",
+      "Deeply nested code (depth 4) (deeper than 75% of files)"
+    ],
+    "trend": "unknown"
+  },
+  {
+    "rank": 3,
+    "path": "src/api/routes.ts",
+    "score": 50,
+    "commits": 3,
+    "authors": 3,
+    "relChurn": 2,
+    "frequency": 1.254,
+    "fixRatio": 0.333,
+    "owners": ["Alice", "Bob"],
+    "band": "hotspot",
+    "reasons": [
+      "Rewritten about 2× in 90 days (100 lines added or removed vs 50 lines today)",
+      "Changed 3 times in 90 days (more often than 50% of files)",
+      "Deeply nested code (depth 3) (deeper than 50% of files)"
+    ],
+    "trend": "unknown"
+  },
+  {
+    "rank": 4,
+    "path": "src/ui/table.tsx",
+    "score": 35,
+    "commits": 4,
+    "authors": 4,
+    "relChurn": 1,
+    "frequency": 1.005,
+    "fixRatio": 0.5,
+    "owners": ["Alice", "Bob"],
+    "band": "watch",
+    "reasons": [
+      "4 people edited it (more than 75% of files)",
+      "50% of changes were bug fixes (2 of 4 changes)"
+    ],
+    "trend": "unknown"
+  },
+  {
+    "rank": 5,
+    "path": "src/ui/theme.ts",
+    "score": 20,
+    "commits": 5,
+    "authors": 5,
+    "relChurn": 0.5,
+    "frequency": 0.831,
+    "fixRatio": 0.6,
+    "owners": ["Alice", "Bob"],
+    "band": "stable",
+    "reasons": [
+      "5 people edited it (more than 99% of files)",
+      "60% of changes were bug fixes (3 of 5 changes)"
+    ],
+    "trend": "unknown"
+  }
+]

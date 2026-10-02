@@ -1,0 +1,27 @@
+{
+  "$comment": "Telemetry is off in v1 (ADR-0006): nothing below is collected. When it is switched on, events go only through @indrasol/labs-core, respect the VS Code telemetry.telemetryLevel setting, and are anonymous.",
+  "collected": false,
+  "commonProperties": ["extensionId", "extensionVersion", "vscodeVersion", "appName", "installId"],
+  "events": [
+    {
+      "name": "activated",
+      "description": "The extension activated.",
+      "collected": false
+    },
+    {
+      "name": "command_executed",
+      "description": "A command ran. Property: commandId.",
+      "collected": false
+    },
+    {
+      "name": "feature_used",
+      "description": "A feature was used. Property: feature (one of build, postcard, treemap; never user content).",
+      "collected": false
+    },
+    {
+      "name": "error",
+      "description": "An error occurred. Property: errorClass (class name only; no message or stack).",
+      "collected": false
+    }
+  ]
+}

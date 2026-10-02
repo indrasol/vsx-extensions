@@ -1,0 +1,10 @@
+{
+  "name": "churnmap",
+  "description": "Code hotspots from git history for your agent: which files are risky, why, and how to change them safely. Local only; nothing is sent anywhere.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Indrasol Labs"
+  },
+  "repository": "https://github.com/indrasol/vsx-extensions",
+  "license": "MIT"
+}

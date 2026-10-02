@@ -7,3 +7,6 @@ packages:
 # package of that name is an unrelated, deprecated one: never install it, even as an auto-installed peer.
 overrides:
   vscode: '-'
+  # Patched transitive versions for mocha (GHSA-73rr-hh4g-fpgx and the serialize-javascript advisory).
+  serialize-javascript: 7.1.2
+  diff: 8.0.3

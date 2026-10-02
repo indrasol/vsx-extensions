@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "churnmap": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@indrasol/churnmap-mcp",
+        "--cache-dir",
+        "${userHome}/.churnmap",
+        "--workspace",
+        "${workspaceFolder}"
+      ]
+    }
+  }
+}

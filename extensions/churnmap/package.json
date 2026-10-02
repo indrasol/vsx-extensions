@@ -1,0 +1,529 @@
+{
+  "name": "churnmap",
+  "displayName": "Churnmap: Code Hotspots City",
+  "description": "Find the riskiest files in your codebase: code hotspots and technical debt from git history, as a 3D city. AI-ready. Zero telemetry. by Indrasol Labs",
+  "version": "1.0.0",
+  "publisher": "Indrasol",
+  "license": "MIT",
+  "icon": "media/icon.png",
+  "galleryBanner": {
+    "color": "#0B1F3A",
+    "theme": "dark"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/indrasol/vsx-extensions.git",
+    "directory": "extensions/churnmap"
+  },
+  "homepage": "https://github.com/indrasol/vsx-extensions/tree/main/extensions/churnmap#readme",
+  "bugs": {
+    "url": "https://github.com/indrasol/vsx-extensions/issues"
+  },
+  "qna": false,
+  "engines": {
+    "vscode": "^1.96.0"
+  },
+  "categories": [
+    "Visualization",
+    "Other"
+  ],
+  "keywords": [
+    "hotspots",
+    "code hotspots",
+    "churn",
+    "code churn",
+    "technical debt",
+    "tech debt",
+    "code quality",
+    "code health",
+    "refactoring",
+    "refactor",
+    "git",
+    "git history",
+    "git log",
+    "code city",
+    "codecity",
+    "visualization",
+    "mcp",
+    "ai agent",
+    "complexity",
+    "maintainability",
+    "code review",
+    "risk",
+    "bug prediction",
+    "legacy code",
+    "codebase map",
+    "software metrics",
+    "static analysis",
+    "cursor",
+    "open vsx",
+    "developer productivity"
+  ],
+  "activationEvents": [
+    "workspaceContains:.git"
+  ],
+  "main": "./dist/extension.js",
+  "extensionKind": [
+    "workspace"
+  ],
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": "limited",
+      "description": "Analysis runs git and reads files, so it is disabled until you trust this workspace."
+    },
+    "virtualWorkspaces": {
+      "supported": false,
+      "description": "Churnmap needs a local git repository."
+    }
+  },
+  "contributes": {
+    "commands": [
+      {
+        "command": "churnmap.build",
+        "title": "Build city",
+        "category": "Churnmap",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "churnmap.open",
+        "title": "Show city",
+        "category": "Churnmap"
+      },
+      {
+        "command": "churnmap.showHotspots",
+        "title": "Show hotspots",
+        "category": "Churnmap"
+      },
+      {
+        "command": "churnmap.setWindow",
+        "title": "Set time window",
+        "category": "Churnmap",
+        "icon": "$(calendar)"
+      },
+      {
+        "command": "churnmap.toggleTreemap",
+        "title": "Toggle 2D treemap",
+        "category": "Churnmap"
+      },
+      {
+        "command": "churnmap.exportPostcard",
+        "title": "Export postcard",
+        "category": "Churnmap"
+      },
+      {
+        "command": "churnmap.ignoreHotspot",
+        "title": "Ignore hotspot…",
+        "category": "Churnmap",
+        "icon": "$(eye-closed)"
+      },
+      {
+        "command": "churnmap.unignore",
+        "title": "Un-ignore hotspot…",
+        "category": "Churnmap",
+        "icon": "$(eye)"
+      },
+      {
+        "command": "churnmap.openFile",
+        "title": "Open file",
+        "category": "Churnmap",
+        "icon": "$(go-to-file)"
+      },
+      {
+        "command": "churnmap.clearCache",
+        "title": "Clear cache",
+        "category": "Churnmap"
+      },
+      {
+        "command": "churnmap.showInCity",
+        "title": "Show in city",
+        "category": "Churnmap",
+        "icon": "$(location)"
+      },
+      {
+        "command": "churnmap.copyHotspotsMarkdown",
+        "title": "Copy hotspots as Markdown",
+        "category": "Churnmap",
+        "icon": "$(copy)"
+      },
+      {
+        "command": "churnmap.showChangedHotspots",
+        "title": "Show hotspots in your changes",
+        "category": "Churnmap"
+      },
+      {
+        "command": "churnmap.selectRepository",
+        "title": "Select repository…",
+        "category": "Churnmap",
+        "icon": "$(repo)"
+      },
+      {
+        "command": "churnmap.openTalkLink",
+        "title": "Talk to Indrasol",
+        "category": "Churnmap"
+      },
+      {
+        "command": "churnmap.createAIPrompt",
+        "title": "Create AI Prompt…",
+        "category": "Churnmap",
+        "icon": "$(sparkle)"
+      },
+      {
+        "command": "churnmap.createAIPromptTop",
+        "title": "Create AI prompt for the top hotspot",
+        "category": "Churnmap",
+        "icon": "$(sparkle)"
+      },
+      {
+        "command": "churnmap.exportForAgents",
+        "title": "Export for agents",
+        "category": "Churnmap",
+        "icon": "$(file-code)"
+      },
+      {
+        "command": "churnmap.addToAgent",
+        "title": "Connect to AI agent…",
+        "category": "Churnmap",
+        "icon": "$(plug)"
+      },
+      {
+        "command": "churnmap.rankCodeOnly",
+        "title": "Rank source code only",
+        "category": "Churnmap",
+        "icon": "$(filter)"
+      }
+    ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "churnmap.openFile",
+          "when": "false"
+        },
+        {
+          "command": "churnmap.showInCity",
+          "when": "false"
+        },
+        {
+          "command": "churnmap.showChangedHotspots",
+          "when": "false"
+        },
+        {
+          "command": "churnmap.openTalkLink",
+          "when": "false"
+        },
+        {
+          "command": "churnmap.rankCodeOnly",
+          "when": "churnmap.rankAll"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "churnmap.createAIPromptTop",
+          "when": "view == churnmap.hotspots",
+          "group": "navigation@0"
+        },
+        {
+          "command": "churnmap.build",
+          "when": "view == churnmap.hotspots",
+          "group": "navigation@1"
+        },
+        {
+          "command": "churnmap.setWindow",
+          "when": "view == churnmap.hotspots",
+          "group": "navigation@2"
+        },
+        {
+          "command": "churnmap.copyHotspotsMarkdown",
+          "when": "view == churnmap.hotspots",
+          "group": "navigation@3"
+        },
+        {
+          "command": "churnmap.exportForAgents",
+          "when": "view == churnmap.hotspots",
+          "group": "navigation@4"
+        },
+        {
+          "command": "churnmap.addToAgent",
+          "when": "view == churnmap.hotspots",
+          "group": "navigation@5"
+        },
+        {
+          "command": "churnmap.rankCodeOnly",
+          "when": "view == churnmap.hotspots && churnmap.rankAll",
+          "group": "navigation@6"
+        },
+        {
+          "command": "churnmap.selectRepository",
+          "when": "view == churnmap.hotspots",
+          "group": "more@1"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "churnmap.createAIPrompt",
+          "when": "view == churnmap.hotspots && viewItem == hotspot",
+          "group": "inline@0"
+        },
+        {
+          "command": "churnmap.openFile",
+          "when": "view == churnmap.hotspots && viewItem == hotspot",
+          "group": "inline@1"
+        },
+        {
+          "command": "churnmap.showInCity",
+          "when": "view == churnmap.hotspots && viewItem == hotspot",
+          "group": "inline@2"
+        },
+        {
+          "command": "churnmap.ignoreHotspot",
+          "when": "view == churnmap.hotspots && viewItem == hotspot",
+          "group": "inline@3"
+        },
+        {
+          "command": "churnmap.unignore",
+          "when": "view == churnmap.hotspots && viewItem == ignoredHotspot",
+          "group": "inline@1"
+        },
+        {
+          "command": "churnmap.createAIPrompt",
+          "when": "view == churnmap.hotspots && viewItem == hotspot",
+          "group": "navigation@0"
+        },
+        {
+          "command": "churnmap.openFile",
+          "when": "view == churnmap.hotspots && viewItem == hotspot",
+          "group": "navigation@1"
+        },
+        {
+          "command": "churnmap.showInCity",
+          "when": "view == churnmap.hotspots && viewItem == hotspot",
+          "group": "navigation@2"
+        },
+        {
+          "command": "churnmap.ignoreHotspot",
+          "when": "view == churnmap.hotspots && viewItem == hotspot",
+          "group": "navigation@3"
+        },
+        {
+          "command": "churnmap.unignore",
+          "when": "view == churnmap.hotspots && viewItem == ignoredHotspot",
+          "group": "navigation@1"
+        }
+      ]
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "churnmap",
+          "title": "Churnmap",
+          "icon": "media/activitybar.svg"
+        }
+      ]
+    },
+    "views": {
+      "churnmap": [
+        {
+          "id": "churnmap.hotspots",
+          "name": "Hotspots"
+        },
+        {
+          "id": "churnmap.moreFromLabs",
+          "name": "More from Indrasol Labs"
+        }
+      ]
+    },
+    "viewsWelcome": [
+      {
+        "view": "churnmap.hotspots",
+        "contents": "Run **Churnmap: Build city** to analyse this repository.\n[Build city](command:churnmap.build)",
+        "when": "isWorkspaceTrusted"
+      },
+      {
+        "view": "churnmap.hotspots",
+        "contents": "Trust this workspace to analyse it. Churnmap runs git and reads files only in trusted workspaces.\n[Manage Workspace Trust](command:workbench.trust.manage)",
+        "when": "!isWorkspaceTrusted"
+      }
+    ],
+    "configuration": {
+      "title": "Churnmap",
+      "properties": {
+        "churnmap.window": {
+          "type": "number",
+          "enum": [
+            30,
+            90,
+            365
+          ],
+          "enumDescriptions": [
+            "Last 30 days",
+            "Last 90 days",
+            "Last 365 days"
+          ],
+          "default": 90,
+          "markdownDescription": "How many days of git history the city and hotspot ranking are built from."
+        },
+        "churnmap.rank": {
+          "type": "string",
+          "enum": [
+            "code",
+            "all"
+          ],
+          "enumDescriptions": [
+            "Rank source code only; documentation, data, configuration, assets and generated files are drawn as glass",
+            "Rank every file, including documentation and data (the earlier behaviour)"
+          ],
+          "default": "code",
+          "markdownDescription": "Which files can rank as hotspots.\n\n- `code` (default): only source code ranks. Documentation (`.md`, `.rst`, `.txt`, notebooks…), data (`.json`, `.yaml`, `.csv`, lock files…), configuration, assets and generated files are still measured and drawn in the city as glass, and their card says why they are not ranked, so frequently edited notes can never outrank risky code.\n- `all`: every file can rank, as before.\n\nHTML counts as code (templates such as `src/templates/page.html`, an app's `index.html`) unless it sits in a `docs/` folder or at the repository root with a docs-like name (`STATUS_TRACKER.html`, `release-notes.html`), where it counts as documentation."
+        },
+        "churnmap.exclude": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "**/node_modules/**",
+            "**/dist/**",
+            "**/*.min.*",
+            "**/*.lock",
+            "**/pnpm-lock.yaml",
+            "**/package-lock.json",
+            "**/*.snap"
+          ],
+          "markdownDescription": "Glob patterns for files that are left out of the city and the hotspot ranking."
+        },
+        "churnmap.maxFiles": {
+          "type": "number",
+          "default": 20000,
+          "minimum": 1,
+          "markdownDescription": "The largest number of files analysed and drawn; bigger repositories are folded into districts."
+        },
+        "churnmap.showStatusBar": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "Show the active file's hotspot rank in the status bar."
+        },
+        "churnmap.warnOnStagedHotspots": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "Show a status-bar warning when your staged or working-tree changes touch a hotspot."
+        },
+        "churnmap.fixKeywords": {
+          "type": "string",
+          "default": "\\b(fix|bug|hotfix|regress|revert)\\b",
+          "markdownDescription": "Regular expression matched against commit messages to count bug-fix commits in the hotspot score."
+        },
+        "churnmap.postcard.detail": {
+          "type": "string",
+          "enum": [
+            "paths",
+            "districts",
+            "none"
+          ],
+          "enumDescriptions": [
+            "Show the top-3 hotspot file paths",
+            "Show only the top-3 hotspot folder names",
+            "Show no paths or folder names"
+          ],
+          "default": "paths",
+          "markdownDescription": "How much of your repository's layout the exported postcard image reveals."
+        },
+        "churnmap.agentContext.refreshOnBuild": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "After every build, rewrite `.churnmap/HOTSPOTS.md` and `.churnmap/hotspots.json` in repositories that already have them (created by **Churnmap: Export for agents**). Never in an untrusted workspace."
+        }
+      }
+    },
+    "walkthroughs": [
+      {
+        "id": "churnmap.gettingStarted",
+        "title": "Get started with Churnmap",
+        "description": "Build your repository's city, read a hotspot and share a postcard.",
+        "steps": [
+          {
+            "id": "buildCity",
+            "title": "Build your city",
+            "description": "Analyse this repository's git history and draw it as a city.\n[Build city](command:churnmap.build)",
+            "media": {
+              "image": "media/icon.png",
+              "altText": "Churnmap icon: a small city with one red tower marked by a pin"
+            },
+            "completionEvents": [
+              "onCommand:churnmap.build"
+            ]
+          },
+          {
+            "id": "readHotspot",
+            "title": "Read a hotspot",
+            "description": "Open the Hotspots view to see the ranked files and why each one is a hotspot. ✦ AI prompt turns any hotspot into a ready-to-paste prompt for your own AI agent (Cursor, Copilot, Claude Code…): the button in the city, on a selected building's card, or on the view's title bar.\n[Create AI prompt](command:churnmap.createAIPrompt)\n[Show hotspots](command:churnmap.hotspots.focus)\n[Export for agents](command:churnmap.exportForAgents) writes .churnmap/HOTSPOTS.md so every agent run knows the hotspots.",
+            "media": {
+              "image": "media/icon.png",
+              "altText": "Churnmap icon: a small city with one red tower marked by a pin"
+            },
+            "completionEvents": [
+              "onView:churnmap.hotspots"
+            ]
+          },
+          {
+            "id": "sharePostcard",
+            "title": "Share a postcard",
+            "description": "Export a 1600×900 image of your city with the top three hotspots, for a chat, a slide or a README. You choose how much it shows (file paths, folder names only, or no names), and nothing is saved until you pick where. It never contains source code.\n[Export postcard](command:churnmap.exportPostcard)\nWorking with an AI agent? [Connect to AI agent…](command:churnmap.addToAgent) gives it Churnmap’s hotspot tools (MCP), all local; it is also in the city's AI agent menu and on the Hotspots view's title bar.\nQuestions, a demo or a team rollout? [Talk to Indrasol](command:churnmap.openTalkLink)",
+            "media": {
+              "image": "media/icon.png",
+              "altText": "Churnmap icon: a small city with one red tower marked by a pin"
+            },
+            "completionEvents": [
+              "onCommand:churnmap.exportPostcard"
+            ]
+          }
+        ]
+      }
+    ],
+    "mcpServerDefinitionProviders": [
+      {
+        "id": "churnmap.mcp",
+        "label": "Churnmap"
+      }
+    ]
+  },
+  "scripts": {
+    "build": "node esbuild.mjs --production && node scripts/third-party-notices.mjs",
+    "watch": "node esbuild.mjs --watch",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "typecheck": "tsc --noEmit -p tsconfig.json && tsc --noEmit -p tsconfig.webview.json",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test:unit": "vitest run --coverage",
+    "test:integration": "node esbuild.mjs --tests && vscode-test",
+    "test": "pnpm test:unit && pnpm test:integration",
+    "package": "pnpm build && vsce package --no-dependencies -o dist/ --baseContentUrl https://github.com/indrasol/vsx-extensions/blob/main/extensions/churnmap --baseImagesUrl https://github.com/indrasol/vsx-extensions/raw/main/extensions/churnmap --no-gitHubIssueLinking --no-gitLabIssueLinking && node scripts/check-readme-urls.mjs",
+    "package:dev": "node scripts/dev-version.mjs",
+    "perf:real": "node scripts/perf-real.mjs"
+  },
+  "dependencies": {
+    "@indrasol/labs-core": "workspace:*",
+    "three": "0.186.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "@modelcontextprotocol/sdk": "1.31.0",
+    "@types/mocha": "10.0.10",
+    "@types/node": "22.20.4",
+    "@types/three": "0.186.0",
+    "@types/vscode": "1.96.0",
+    "@vitest/coverage-v8": "4.1.11",
+    "@vscode/test-cli": "0.0.15",
+    "@vscode/test-electron": "3.1.0",
+    "@vscode/vsce": "3.9.2",
+    "esbuild": "0.28.2",
+    "eslint": "10.11.0",
+    "eslint-config-prettier": "10.1.8",
+    "gifenc": "1.0.3",
+    "mocha": "11.7.6",
+    "prettier": "3.9.9",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.71.0",
+    "vitest": "4.1.11",
+    "zod": "4.6.5"
+  }
+}
