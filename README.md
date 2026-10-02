@@ -12,9 +12,9 @@ review everything as humans: see [how we build](docs/how-we-build.md). See
 
 ## Extensions
 
-| Extension                                 | What it does                                                                                                  | Marketplace | Open VSX | Status      |
-| ----------------------------------------- | ------------------------------------------------------------------------------------------------------------- | ----------- | -------- | ----------- |
-| [Churnmap](extensions/churnmap/README.md) | Your repository as a 3D city: code hotspots from git history, ranked and explained. AI-ready, zero telemetry. | –           | –        | Coming soon |
+| Extension                                 | What it does                                                                                                  | Marketplace                                                                      | Open VSX                                                    | Status   |
+| ----------------------------------------- | ------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- | ----------------------------------------------------------- | -------- |
+| [Churnmap](extensions/churnmap/README.md) | Your repository as a 3D city: code hotspots from git history, ranked and explained. AI-ready, zero telemetry. | [Install](https://marketplace.visualstudio.com/items?itemName=Indrasol.churnmap) | [Install](https://open-vsx.org/extension/Indrasol/churnmap) | Released |
 
 ## Repository layout
 
