@@ -366,10 +366,9 @@ Questions, ideas and bugs are welcome in
 
 ## More from Indrasol Labs
 
-Small, private-by-default tools for developers, in VS Code and every editor that uses Open VSX.
-See all Indrasol Labs extensions on the
-[Visual Studio Marketplace](https://marketplace.visualstudio.com/publishers/Indrasol) and
-[Open VSX](https://open-vsx.org/namespace/Indrasol).
+Churnmap is built by **Indrasol Labs**, where Indrasol builds and shares open-source work: AI and
+agent tooling, code intelligence, security and developer tools, all private by default.
+[Explore Indrasol Labs](https://labs.indrasol.com/go/indrasol/readme).
 
 ---
 
