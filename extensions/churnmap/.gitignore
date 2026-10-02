@@ -1,0 +1,12 @@
+node_modules/
+dist/
+out/
+coverage/
+.vscode-test/
+*.vsix
+*.tsbuildinfo
+# Built by esbuild.mjs from webview/
+media/webview.js
+media/webview.js.map
+media/webview.css
+test-output/

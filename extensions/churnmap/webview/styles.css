@@ -1,0 +1,1349 @@
+/* The city webview. Colours come from the editor theme's CSS variables and the palette (set by the
+   script through CSSOM); fonts are system fonts only. Nothing is loaded from outside the extension
+   (ADR-0011: no font or image files). Type scale 12 / 13 / 15 / 20 px, weights 400 / 600. */
+:root {
+  --cm-ui:
+    'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Segoe UI Variable Text', 'Segoe UI',
+    system-ui, sans-serif;
+  --cm-code: var(--vscode-editor-font-family, ui-monospace, monospace);
+  --cm-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --cm-fast: 180ms;
+  --cm-state: 400ms;
+  --cm-fg: var(--vscode-editor-foreground);
+  --cm-muted: color-mix(in srgb, var(--vscode-editor-foreground) 62%, transparent);
+  --cm-glass: color-mix(in srgb, var(--vscode-editor-background) 74%, transparent);
+  --cm-glass-strong: color-mix(in srgb, var(--vscode-editor-background) 88%, transparent);
+  --cm-hairline: color-mix(in srgb, var(--vscode-editor-foreground) 13%, transparent);
+  --cm-hover: color-mix(in srgb, var(--vscode-editor-foreground) 9%, transparent);
+  --cm-shadow: 0 10px 30px rgba(0, 0, 0, 0.28), 0 1px 2px rgba(0, 0, 0, 0.2);
+  --cm-bg-top: var(--vscode-editor-background);
+  --cm-bg-bottom: var(--vscode-editor-background);
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+  background: linear-gradient(180deg, var(--cm-bg-top), var(--cm-bg-bottom));
+  color: var(--cm-fg);
+  font-family: var(--cm-ui);
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.4;
+  -webkit-font-smoothing: antialiased;
+}
+
+#app {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+.num {
+  font-variant-numeric: tabular-nums;
+}
+
+.path {
+  font-family: var(--cm-code);
+}
+
+/* The 3D city (#city) and the 2D treemap (#treemap) share the space; the treemap is on top. */
+#app > canvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  outline: none;
+}
+
+#app > canvas:focus-visible {
+  outline: 2px solid var(--vscode-focusBorder);
+  outline-offset: -2px;
+}
+
+#treemap.fade-in {
+  animation: cm-fade-in var(--cm-state) var(--cm-ease) both;
+}
+
+#treemap.fade-out {
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--cm-state) var(--cm-ease);
+}
+
+@keyframes cm-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes cm-rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Glass surfaces: translucent theme background, blur, hairline border, soft shadow. */
+.glass {
+  background: var(--cm-glass);
+  -webkit-backdrop-filter: blur(12px) saturate(1.15);
+  backdrop-filter: blur(12px) saturate(1.15);
+  border: 1px solid var(--cm-hairline);
+  border-radius: 10px;
+  box-shadow: var(--cm-shadow);
+}
+
+/* ---- Top bar ---- */
+#hud {
+  position: absolute;
+  z-index: 4;
+  top: 10px;
+  left: 10px;
+  right: 10px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 8px 6px 14px;
+  background: var(--cm-glass);
+  -webkit-backdrop-filter: blur(12px) saturate(1.15);
+  backdrop-filter: blur(12px) saturate(1.15);
+  border: 1px solid var(--cm-hairline);
+  border-radius: 10px;
+  box-shadow: var(--cm-shadow);
+}
+
+/* Every title part can shrink (the name and meta are cut with an ellipsis), so nothing in the
+   title ever draws over the controls. */
+.hud-title {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  min-width: 0;
+  flex: 1 1 auto;
+  overflow: hidden;
+}
+
+.hud-repo {
+  flex: 0 1 auto;
+  min-width: 3em;
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Below 900 px: two rows (repository, switch and meta; then the controls). */
+#hud.hud-wrap {
+  flex-wrap: wrap;
+  row-gap: 6px;
+  padding-left: 12px;
+}
+
+#hud.hud-wrap .hud-title {
+  flex: 1 1 100%;
+}
+
+#hud.hud-wrap .hud-controls {
+  flex: 1 1 100%;
+  flex-wrap: wrap;
+  row-gap: 6px;
+}
+
+/* Below 640 px: the window and view groups are dropdowns; the meta text is in the name's tooltip. */
+.hud-compact-only {
+  display: none;
+}
+
+#hud.hud-compact .hud-compact-only {
+  display: block;
+}
+
+#hud.hud-compact .hud-wide-only,
+#hud.hud-compact .hud-meta {
+  display: none;
+}
+
+#hud.hud-compact .hud-controls {
+  gap: 6px;
+}
+
+.hud-switch {
+  flex: 0 0 auto;
+  margin: 0;
+  padding: 1px 7px;
+  font: inherit;
+  font-size: 11px;
+  color: var(--cm-muted);
+  background: transparent;
+  border: 1px solid var(--cm-hairline);
+  border-radius: 999px;
+  cursor: pointer;
+  align-self: center;
+}
+
+.hud-switch:hover {
+  color: inherit;
+}
+
+.hud-switch:focus-visible {
+  outline: 2px solid var(--vscode-focusBorder, currentColor);
+  outline-offset: 1px;
+}
+
+.hud-meta,
+.hud-message {
+  margin: 0;
+  font-size: 12px;
+  color: var(--cm-muted);
+  white-space: nowrap;
+}
+
+.hud-meta {
+  flex: 0 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.hud-message:empty {
+  display: none;
+}
+
+.hud-message {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  padding: 4px 10px;
+  border-radius: 8px;
+  background: var(--cm-glass-strong);
+  border: 1px solid var(--cm-hairline);
+  white-space: normal;
+}
+
+.hud-controls {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 0 0 auto;
+}
+
+.segmented {
+  display: inline-flex;
+  padding: 2px;
+  border-radius: 8px;
+  background: var(--cm-hover);
+  border: 1px solid var(--cm-hairline);
+}
+
+.segment,
+.hud-button,
+.hud-icon-button,
+.menu-item,
+.coach-skip,
+.coach-next,
+.rail-open {
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--cm-fg);
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  transition:
+    background-color var(--cm-fast) var(--cm-ease),
+    color var(--cm-fast) var(--cm-ease),
+    opacity var(--cm-fast) var(--cm-ease);
+}
+
+.segment {
+  min-width: 34px;
+  padding: 3px 9px;
+  border-radius: 6px;
+  color: var(--cm-muted);
+}
+
+.segment:hover {
+  color: var(--cm-fg);
+}
+
+.segment[aria-pressed='true'] {
+  color: var(--vscode-button-foreground);
+  background: var(--vscode-button-background);
+}
+
+.segment:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.hud-button {
+  padding: 5px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--cm-hairline);
+}
+
+.hud-button:hover,
+.hud-icon-button:hover,
+.menu-item:hover,
+.rail-open:hover {
+  background: var(--cm-hover);
+}
+
+.hud-button[aria-pressed='true'] {
+  color: var(--vscode-button-foreground);
+  background: var(--vscode-button-background);
+  border-color: transparent;
+}
+
+.hud-icon-button {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  font-size: 15px;
+  line-height: 1;
+}
+
+/* "Ranking: all files" with a one-click way back to code only. */
+.hud-chip {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  padding: 1px 3px 1px 9px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+  color: var(--vscode-editorWarning-foreground, var(--cm-fg));
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  align-self: center;
+}
+
+.hud-chip-button {
+  padding: 1px 7px;
+  font: inherit;
+  font-size: 11px;
+  color: var(--cm-fg);
+  background: var(--cm-hover);
+  border: 0;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.menu-wrap {
+  position: relative;
+}
+
+.menu {
+  position: absolute;
+  z-index: 6;
+  top: calc(100% + 8px);
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  min-width: 190px;
+  padding: 4px;
+  background: var(--cm-glass-strong);
+}
+
+.menu-item {
+  padding: 6px 10px;
+  border-radius: 6px;
+  text-align: left;
+  font-weight: 400;
+  font-size: 13px;
+}
+
+.menu-item[aria-checked='true']::after {
+  content: ' ✓';
+}
+
+.menu-item:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+/* ---- Dock panels (card, rail, legend): placed by dock.ts, moved by their header ---- */
+/* border-box: the dock's max-height is the whole panel, padding and border included. */
+.docked-panel {
+  position: absolute;
+  box-sizing: border-box;
+  overflow: auto;
+}
+
+/* Border-box panels keep the outer widths they had before (content + padding + border). */
+.rail.docked-panel {
+  width: 298px;
+}
+
+.legend.docked-panel {
+  width: 276px;
+}
+
+.legend.docked-panel.collapsed {
+  width: 190px;
+}
+
+.card.docked-panel {
+  width: 326px;
+}
+
+.card.docked-panel.collapsed {
+  width: auto;
+}
+
+.rail-open,
+.card-button,
+.hud-button {
+  white-space: nowrap;
+}
+
+/* Squeezed out by a canvas too small for every panel (it comes back when there is room). */
+.docked-panel.squeezed {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.dock-handle {
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+}
+
+.dock-handle:focus-visible {
+  outline: 2px solid var(--vscode-focusBorder, currentColor);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+.docked-panel.dragging {
+  z-index: 8;
+  opacity: 0.92;
+  transition: none;
+}
+
+.docked-panel.dragging .dock-handle {
+  cursor: grabbing;
+}
+
+.card-tools {
+  display: flex;
+  flex: 0 0 auto;
+  gap: 2px;
+  margin-left: auto;
+}
+
+.card-tool {
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  font: inherit;
+  font-size: 15px;
+  line-height: 1;
+  color: var(--cm-muted);
+  background: transparent;
+  border: 0;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.card-tool:hover {
+  color: var(--cm-fg);
+  background: var(--cm-hover);
+}
+
+.card-tool:focus-visible,
+.card-link:focus-visible,
+.card-pill:focus-visible {
+  outline: 2px solid var(--vscode-focusBorder, currentColor);
+  outline-offset: 1px;
+}
+
+/* A text link styled button ("How is this scored?"). */
+.card-link {
+  padding: 0;
+  font: inherit;
+  font-size: 12px;
+  color: var(--vscode-textLink-foreground, var(--cm-fg));
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.card-link:hover {
+  color: var(--vscode-textLink-activeForeground, var(--cm-fg));
+}
+
+/* ---- Legend ---- */
+.legend {
+  position: absolute;
+  z-index: 3;
+  left: 10px;
+  bottom: 10px;
+  width: 250px;
+  padding: 8px 12px 10px;
+}
+
+.legend-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: -2px -4px 6px 0;
+}
+
+.legend-title {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--cm-muted);
+}
+
+.legend.collapsed {
+  width: 170px;
+  padding: 6px 10px 8px;
+}
+
+.legend.collapsed .legend-bar {
+  cursor: pointer;
+}
+
+.legend-rule {
+  margin: 6px 0 0;
+  font-size: 12px;
+}
+
+.legend .card-link {
+  margin-top: 6px;
+}
+
+.legend-bar {
+  height: 8px;
+  border-radius: 4px;
+}
+
+.legend-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 4px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.legend-label.legend-watch {
+  /* Watch starts at 60 of 100. */
+  margin-left: 26%;
+  margin-right: auto;
+}
+
+.legend-key,
+.legend-glass {
+  margin: 4px 0 0;
+  font-size: 12px;
+  color: var(--cm-muted);
+}
+
+.legend-glass {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.legend-glass-swatch,
+.glass-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  border: 1px solid var(--cm-hairline);
+}
+
+.glass-dot {
+  flex: 0 0 auto;
+  width: 12px;
+  height: 12px;
+  margin-top: 3px;
+  background: color-mix(in srgb, var(--cm-fg) 25%, transparent);
+}
+
+/* ---- Insights rail ---- */
+.rail {
+  position: absolute;
+  z-index: 3;
+  top: 62px;
+  right: 10px;
+  width: 280px;
+  max-height: calc(100% - 82px);
+  overflow: auto;
+  padding: 8px;
+}
+
+.rail.collapsed {
+  width: auto;
+  padding: 4px;
+}
+
+.rail-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 2px 2px 6px 6px;
+}
+
+.rail.collapsed .rail-head {
+  padding: 0;
+}
+
+.rail.collapsed .rail-title,
+.rail.collapsed .card-tools,
+.rail-expand {
+  display: none;
+}
+
+/* Collapsed: one button that says how many files need attention, and opens the rail again. */
+.rail.collapsed .rail-expand {
+  display: inline-block;
+  padding: 4px 10px;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--cm-fg);
+  background: transparent;
+  border: 0;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.rail.collapsed .rail-expand:hover {
+  background: var(--cm-hover);
+}
+
+.rail-title {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--cm-muted);
+}
+
+.rail-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.rail-card {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--cm-hairline);
+  background: color-mix(in srgb, var(--vscode-editor-background) 55%, transparent);
+  cursor: pointer;
+  animation: cm-rise-in var(--cm-state) var(--cm-ease) both;
+  transition:
+    background-color var(--cm-fast) var(--cm-ease),
+    border-color var(--cm-fast) var(--cm-ease);
+}
+
+.rail-card:hover {
+  background: var(--cm-hover);
+}
+
+.rail-card-head {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+.rail-summary {
+  margin: 6px 0 0;
+  font-size: 13px;
+}
+
+.rail-card-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 6px;
+  color: var(--cm-muted);
+}
+
+.rail-open {
+  padding: 3px 8px;
+  border-radius: 6px;
+  border: 1px solid var(--cm-hairline);
+}
+
+/* ---- Card ---- */
+.card {
+  position: absolute;
+  z-index: 5;
+  width: 300px;
+  max-width: calc(100% - 24px);
+  padding: 12px;
+  pointer-events: none;
+  background: var(--cm-glass-strong);
+}
+
+.card.enter {
+  animation: cm-rise-in var(--cm-fast) var(--cm-ease) both;
+}
+
+.card-head {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.card-titles {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+/* The pinned card's header drags it. */
+.card-grip {
+  margin: -4px -4px 0;
+  padding: 4px;
+  border-radius: 8px;
+}
+
+/* Collapsed: a small pill ("#1 task_router.py ›"); a click expands the card again. */
+.card.docked.collapsed {
+  width: auto;
+  max-width: min(260px, calc(100% - 24px));
+  padding: 4px;
+}
+
+.card.collapsed .card-grip {
+  margin: 0;
+  padding: 0;
+}
+
+.card-pill {
+  display: block;
+  max-width: 100%;
+  padding: 4px 10px;
+  overflow: hidden;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: var(--cm-fg);
+  background: transparent;
+  border: 0;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.card-pill:hover {
+  background: var(--cm-hover);
+}
+
+/* The facts row under the reasons: lines · People 2 · Complexity rising ↑. */
+.card-facts {
+  margin: 10px 0 0;
+  font-size: 12px;
+  color: var(--cm-muted);
+}
+
+.card-fact.has-tip {
+  text-decoration: underline dotted;
+  text-underline-offset: 3px;
+  cursor: help;
+}
+
+/* While a card is pinned, other buildings get this one-line tooltip instead of a second card. */
+.hover-tip {
+  position: absolute;
+  z-index: 5;
+  max-width: 280px;
+  padding: 3px 8px;
+  overflow: hidden;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  pointer-events: none;
+  background: var(--cm-glass-strong);
+  border: 1px solid var(--cm-hairline);
+  border-radius: 6px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+}
+
+.card-name,
+.card-folder {
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.card-name {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.card-folder {
+  font-size: 12px;
+  color: var(--cm-muted);
+}
+
+.rank-badge,
+.pill-rank {
+  flex: 0 0 auto;
+  display: inline-block;
+  padding: 1px 7px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  line-height: 18px;
+}
+
+.rank-badge {
+  margin-top: 1px;
+}
+
+.meter {
+  margin-top: 10px;
+}
+
+.meter-track {
+  height: 6px;
+  border-radius: 3px;
+  background: var(--cm-hover);
+  overflow: hidden;
+}
+
+.meter-fill {
+  height: 100%;
+  border-radius: 3px;
+}
+
+.meter-label {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 3px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.meter-score {
+  color: var(--cm-muted);
+}
+
+.card-reasons {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 10px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.card-reason {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+.card-reason .icon {
+  flex: 0 0 auto;
+  margin-top: 2px;
+  color: var(--cm-muted);
+}
+
+.card-reason-text p {
+  margin: 0;
+}
+
+.sentence {
+  font-size: 13px;
+}
+
+.detail {
+  font-size: 12px;
+  color: var(--cm-muted);
+}
+
+.card-spark {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  color: var(--vscode-textLink-foreground, var(--cm-fg));
+}
+
+.card-spark-label {
+  font-size: 12px;
+  color: var(--cm-muted);
+}
+
+.card-note {
+  margin: 8px 0 0;
+  font-size: 13px;
+}
+
+.card-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 4px 10px;
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid var(--cm-hairline);
+}
+
+.card-foot p {
+  margin: 0;
+  font-size: 12px;
+}
+
+.card-hint {
+  color: var(--cm-muted);
+}
+
+/* The hover card follows the pointer and ignores it; the pinned (docked) card takes clicks. */
+.card.docked {
+  pointer-events: auto;
+}
+
+.card-actions {
+  display: flex;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.card-button {
+  flex: 1 1 0;
+  padding: 5px 10px;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--cm-fg);
+  background: transparent;
+  border: 1px solid var(--cm-hairline);
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.card-button:hover {
+  background: var(--cm-hover);
+}
+
+/* Primary: ✦ AI prompt on the pinned card, the rail and the HUD, in the editor's button colours. */
+.card-button.primary,
+.hud-button.primary,
+.rail-ask {
+  color: var(--vscode-button-foreground);
+  background: var(--vscode-button-background);
+  border-color: transparent;
+}
+
+.card-button.primary:hover,
+.hud-button.primary:hover,
+.rail-ask:hover {
+  background: var(--vscode-button-hoverBackground, var(--vscode-button-background));
+}
+
+.card-button:focus-visible,
+.hud-button:focus-visible,
+.rail-open:focus-visible,
+.hud-chip-button:focus-visible,
+.rail-expand:focus-visible {
+  outline: 2px solid var(--vscode-focusBorder, currentColor);
+  outline-offset: 1px;
+}
+
+.hud-button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.rail-actions {
+  display: flex;
+  gap: 4px;
+}
+
+/* ---- Floating labels ---- */
+.labels {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.pill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 9px 3px 3px;
+  border-radius: 999px;
+  background: var(--cm-glass-strong);
+  border: 1px solid var(--cm-hairline);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+  font-size: 12px;
+  white-space: nowrap;
+  will-change: transform;
+}
+
+.pill-name {
+  font-weight: 600;
+}
+
+/* No room for the name next to a higher rank: just the rank badge, the name on hover. */
+.pill.compact {
+  padding: 3px;
+  pointer-events: auto;
+  cursor: default;
+}
+
+.pill.compact .pill-name {
+  display: none;
+}
+
+/* Joins a pill moved out of the way to its building. */
+.pill-leader {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 1px;
+  transform-origin: 0 50%;
+  background: color-mix(in srgb, var(--cm-fg) 55%, transparent);
+  will-change: transform;
+}
+
+.district-label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--cm-fg) 70%, transparent);
+  text-shadow: 0 1px 2px color-mix(in srgb, var(--vscode-editor-background) 80%, transparent);
+  white-space: nowrap;
+  will-change: transform;
+}
+
+/* ---- Coach mark ---- */
+.coach {
+  position: absolute;
+  z-index: 7;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: color-mix(in srgb, var(--vscode-editor-background) 30%, transparent);
+}
+
+.coach-panel {
+  width: min(360px, calc(100% - 40px));
+  padding: 18px 18px 14px;
+  background: var(--cm-glass-strong);
+}
+
+.coach-panel.enter {
+  animation: cm-rise-in var(--cm-state) var(--cm-ease) both;
+}
+
+.coach-counter {
+  margin: 0;
+  font-size: 12px;
+  color: var(--cm-muted);
+}
+
+.coach-title {
+  margin: 4px 0 0;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.coach-text {
+  margin: 6px 0 0;
+  font-size: 13px;
+}
+
+.coach-dots {
+  display: flex;
+  gap: 6px;
+  margin-top: 14px;
+}
+
+.coach-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--cm-hairline);
+  transition: width var(--cm-fast) var(--cm-ease);
+}
+
+.coach-dot.active {
+  width: 18px;
+  background: var(--vscode-button-background);
+}
+
+.coach-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.coach-skip,
+.coach-next {
+  padding: 5px 12px;
+  border-radius: 8px;
+}
+
+.coach-skip {
+  color: var(--cm-muted);
+}
+
+.coach-next {
+  color: var(--vscode-button-foreground);
+  background: var(--vscode-button-background);
+}
+
+/* ---- "How is this scored?" ---- */
+.explainer {
+  position: absolute;
+  z-index: 9;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  background: color-mix(in srgb, var(--vscode-editor-background) 45%, transparent);
+}
+
+.explainer-sheet {
+  display: flex;
+  flex-direction: column;
+  width: min(560px, 100%);
+  max-height: 100%;
+  background: var(--cm-glass-strong);
+  animation: cm-rise-in var(--cm-fast) var(--cm-ease) both;
+}
+
+.explainer-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 12px 12px 4px 16px;
+}
+
+.explainer-title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.explainer-body {
+  padding: 4px 16px 16px;
+  overflow: auto;
+  outline: none;
+}
+
+.explainer-body p,
+.explainer-body li {
+  margin: 0;
+  font-size: 13px;
+}
+
+.explainer-intro {
+  margin-bottom: 10px !important;
+}
+
+.explainer-questions {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding-left: 20px;
+}
+
+.explainer-q {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-weight: 600;
+}
+
+.explainer-weight {
+  color: var(--cm-muted);
+}
+
+.explainer-section {
+  margin-top: 14px;
+}
+
+.explainer-h3 {
+  margin: 0 0 4px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--cm-muted);
+}
+
+.explainer-list {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin: 0;
+  padding-left: 18px;
+}
+
+.explainer-total {
+  margin-top: 6px !important;
+  font-weight: 600;
+}
+
+/* ---- Top hotspots list (T) ---- */
+.toplist {
+  position: absolute;
+  z-index: 6;
+  top: calc(var(--cm-hud-bottom, 52px) + 8px);
+  right: 10px;
+  width: min(420px, calc(100% - 20px));
+  max-height: calc(100% - var(--cm-hud-bottom, 52px) - 18px);
+  overflow: auto;
+  padding: 8px 0;
+  background: var(--cm-glass-strong);
+  -webkit-backdrop-filter: blur(12px) saturate(1.15);
+  backdrop-filter: blur(12px) saturate(1.15);
+  border: 1px solid var(--cm-hairline);
+  border-radius: 10px;
+  box-shadow: var(--cm-shadow);
+}
+
+.toplist h2 {
+  margin: 0 12px 6px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--cm-muted);
+}
+
+.toplist ol {
+  margin: 0;
+  padding: 0 4px;
+  list-style: none;
+}
+
+.toplist li {
+  padding: 4px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  overflow-wrap: anywhere;
+  font-variant-numeric: tabular-nums;
+}
+
+.toplist li[aria-selected='true'] {
+  color: var(--vscode-list-activeSelectionForeground);
+  background: var(--vscode-list-activeSelectionBackground);
+}
+
+.high-contrast .toplist li[aria-selected='true'] {
+  outline: 1px solid var(--vscode-contrastActiveBorder, var(--vscode-focusBorder));
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Focus rings: 2 px, 3 px in high contrast (theme or menu toggle). */
+:focus-visible {
+  outline: 2px solid var(--vscode-focusBorder);
+  outline-offset: 1px;
+}
+
+.high-contrast :focus-visible,
+.high-contrast #app > canvas:focus-visible {
+  outline-width: 3px;
+}
+
+.high-contrast .glass,
+.high-contrast #hud,
+.high-contrast .pill {
+  border-color: var(--vscode-contrastBorder, var(--cm-fg));
+}
+
+.message,
+.noscript {
+  margin: 16px;
+}
+
+/* Reduced motion: every animation is an instant state change. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* ---- ⋯ → ? Controls ---- */
+.controls-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.controls-table th,
+.controls-table td {
+  padding: 5px 8px 5px 0;
+  text-align: left;
+  vertical-align: top;
+  border-top: 1px solid var(--cm-hairline);
+}
+
+.controls-table th {
+  width: 48%;
+  font-weight: 600;
+}

@@ -2,6 +2,19 @@
 
 _Append a short entry after every merged task. Newest at the top._
 
+## 2026-10-01 — Churnmap initial release (1.0.0)
+
+- **Done:** `extensions/churnmap/` added as one initial-release commit: version 1.0.0, a single
+  CHANGELOG entry, `docs/specs/churnmap.md` and `docs/build-notes/churnmap.md`, and a README table
+  row ("Coming soon"). `ci.yml` gains a `churnmap (windows-latest | macos-latest)` job running its
+  lint, typecheck, unit and integration suites (VS Code 1.96.0 and stable) and packaging; the
+  `ci` job's timeout is now 30 minutes. `scripts/sbom.mjs` also lists packages esbuild bundles from
+  devDependencies (read from a workspace's `dist/bundle-inputs.json`), and the ship list allows
+  `ThirdPartyNotices.txt`. Churnmap's package script passes `--baseContentUrl`/`--baseImagesUrl`
+  and disables issue autolinking so README images and links work on both stores, then checks the
+  packaged README. Root `overrides` pin mocha's `diff` and `serialize-javascript` to patched versions.
+- **Next:** release dry-run, then tag `churnmap@v1.0.0`.
+
 ## 2026-09-29 — security and release workflows
 
 - **Done:** `security.yml` (PRs, `main`, weekly, manual) with required-check jobs `gitleaks` (the

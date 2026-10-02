@@ -99,7 +99,9 @@ jobs:
       - run: xvfb-run -a pnpm --filter "$EXT" test
       - run: pnpm --filter "$EXT" build
 
-      # The only `vsce package` in this workflow; later jobs publish this exact file.
+      # The only `vsce package` in this workflow; later jobs publish this exact file. Each
+      # extension's `package` script sets its own vsce flags (Churnmap: --baseContentUrl and
+      # --baseImagesUrl, so README images resolve on both stores, then a README URL check).
       - run: pnpm --filter "$EXT" package
 
       - name: Check the package

@@ -5,7 +5,7 @@ import { execFileSync } from 'node:child_process';
 import { ROOT, extensionWorkspaces, findWorkspace } from './workspaces.mjs';
 
 const ALLOWED =
-  /^(dist\/|media\/|README\.md$|CHANGELOG\.md$|LICENSE$|telemetry\.json$|package\.json$)/;
+  /^(dist\/|media\/|README\.md$|CHANGELOG\.md$|LICENSE$|ThirdPartyNotices\.txt$|telemetry\.json$|package\.json$)/;
 
 const names = process.argv.slice(2);
 const workspaces = names.length > 0 ? names.map(findWorkspace) : extensionWorkspaces();

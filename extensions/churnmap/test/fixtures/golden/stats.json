@@ -1,0 +1,67 @@
+[
+  {
+    "path": "docs/setup.md",
+    "bytes": 900,
+    "loc": 30,
+    "maxDepth": 0,
+    "meanDepth": 0,
+    "complexity": 0
+  },
+  {
+    "path": "media/logo.png",
+    "bytes": 2048,
+    "loc": 0,
+    "maxDepth": 0,
+    "meanDepth": 0,
+    "complexity": 0,
+    "skipped": "binary"
+  },
+  {
+    "path": "src/api/routes.ts",
+    "bytes": 1500,
+    "loc": 50,
+    "maxDepth": 3,
+    "meanDepth": 0.5,
+    "complexity": 2
+  },
+  {
+    "path": "src/billing/invoice.ts",
+    "bytes": 3000,
+    "loc": 100,
+    "maxDepth": 6,
+    "meanDepth": 1,
+    "complexity": 4
+  },
+  {
+    "path": "src/billing/tax.ts",
+    "bytes": 3000,
+    "loc": 100,
+    "maxDepth": 4,
+    "meanDepth": 1.5,
+    "complexity": 3
+  },
+  {
+    "path": "src/config.ts",
+    "bytes": 300,
+    "loc": 12,
+    "maxDepth": 1,
+    "meanDepth": 0.5,
+    "complexity": 0.8
+  },
+  {
+    "path": "src/ui/table.tsx",
+    "bytes": 1200,
+    "loc": 40,
+    "maxDepth": 2,
+    "meanDepth": 0.75,
+    "complexity": 1.5
+  },
+  {
+    "path": "src/ui/theme.ts",
+    "bytes": 6000,
+    "loc": 200,
+    "maxDepth": 1,
+    "meanDepth": 1,
+    "complexity": 1
+  }
+]

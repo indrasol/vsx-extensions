@@ -16,7 +16,7 @@ jobs:
   ci:
     name: ci
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -52,3 +52,45 @@ jobs:
           name: vsix
           path: '**/*.vsix'
           if-no-files-found: ignore
+
+  # Churnmap runs git and real file paths, so its whole chain (lint, typecheck, unit and every
+  # integration configuration on the engines.vscode minimum and stable, package) also runs on
+  # Windows and macOS. Ubuntu is covered by the `ci` job above.
+  churnmap-os:
+    name: churnmap (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: extensions/churnmap
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+        working-directory: .
+
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: extensions/churnmap/.vscode-test
+          key: vscode-test-churnmap-${{ runner.os }}-${{ hashFiles('extensions/churnmap/.vscode-test.mjs') }}
+          restore-keys: vscode-test-churnmap-${{ runner.os }}-
+
+      # The fixtures commit with a name and e-mail of their own; git only needs to exist.
+      - run: git --version
+      - run: pnpm lint
+      - run: pnpm typecheck
+      - run: pnpm test
+      - run: pnpm package

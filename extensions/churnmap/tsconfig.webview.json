@@ -1,0 +1,13 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "types": []
+  },
+  // Browser code: the webview bundle and everything it shares with the host. No `node` or
+  // `vscode` types, so an accidental host-only import fails the typecheck.
+  "include": ["src/city", "src/shared", "webview", "test/unit/webview"]
+}

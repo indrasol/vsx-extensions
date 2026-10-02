@@ -6,3 +6,6 @@ coverage/
 pnpm-lock.yaml
 *.vsix
 Claude outputs/
+extensions/churnmap/media/webview.js
+extensions/churnmap/media/webview.css
+extensions/churnmap/test-output/
