@@ -2,7 +2,7 @@
   "name": "churnmap",
   "displayName": "Churnmap: Code Hotspots City",
   "description": "Find the riskiest files in your codebase: code hotspots and technical debt from git history, as a 3D city. AI-ready. Zero telemetry. by Indrasol Labs",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "publisher": "Indrasol",
   "license": "MIT",
   "icon": "media/icon.png",
@@ -15,7 +15,7 @@
     "url": "https://github.com/indrasol/vsx-extensions.git",
     "directory": "extensions/churnmap"
   },
-  "homepage": "https://github.com/indrasol/vsx-extensions/tree/main/extensions/churnmap#readme",
+  "homepage": "https://labs.indrasol.com/churnmap",
   "bugs": {
     "url": "https://github.com/indrasol/vsx-extensions/issues"
   },
