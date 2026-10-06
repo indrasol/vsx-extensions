@@ -28,6 +28,7 @@ import { argPath, type HotspotNode } from './panel/hotspotTree.js';
 import { HOTSPOTS_VIEW, HotspotsView } from './panel/HotspotsView.js';
 import { IGNORE_KEY, type IgnoreEntry, IgnoreStore } from './panel/ignore.js';
 import { ignoreHotspot, unignore } from './panel/ignoreCommands.js';
+import { clearLegacyInstallId } from './legacyInstallId.js';
 import { links, MORE_FROM_LABS_LINKS } from './links.js';
 import { copiedMessage, hotspotsMarkdown, localDate } from './panel/markdown.js';
 import { overridePrompts, type Prompts } from './prompts.js';
@@ -303,6 +304,12 @@ export function activate(context: vscode.ExtensionContext): TestApi | undefined 
   setImmediate(warmStartInBackground);
   // Agent configs written by an older version point at its server path: offer to fix them (reads
   // only; writes on the user's click).
+  // 1.0.0 and 1.0.1 stored an install id for telemetry that never shipped: clear it once.
+  setImmediate(() => {
+    clearLegacyInstallId(context.globalState).catch((err: unknown) => {
+      logger.warn(`Install id cleanup failed: ${err instanceof Error ? err.message : String(err)}`);
+    });
+  });
   setImmediate(() => {
     checkAgentConfigs(connectDeps).catch((err: unknown) => {
       logger.warn(`Agent config check failed: ${err instanceof Error ? err.message : String(err)}`);

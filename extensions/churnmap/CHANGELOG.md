@@ -8,7 +8,7 @@ All notable changes to this extension are documented here. The format follows
 
 ### Removed
 
-- Removed unused telemetry code; no behaviour change.
+- Removed unused telemetry code and cleared the old local install id; no behaviour change.
 
 ## [1.0.1]
 
