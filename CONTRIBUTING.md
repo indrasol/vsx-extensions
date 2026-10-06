@@ -20,7 +20,7 @@ Thanks for helping. This repo is a pnpm monorepo; every extension lives under `e
 4. Releases are cut only by maintainers tagging `<extension>@vX.Y.Z` on `main`; `release.yml` does
    the rest after a human approves the publish environment.
 
-## Proposing an extension
+## Proposing an idea
 
-Open an issue with the **Extension idea** template. Maintainers review ideas regularly and
-reply on the issue.
+Open an issue with the **Open-source idea** template: tools, libraries, agents and extensions for
+developers are all welcome. Maintainers review ideas regularly and reply on the issue.

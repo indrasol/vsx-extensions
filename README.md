@@ -24,7 +24,7 @@ _[Churnmap](extensions/churnmap/README.md): your repository as a 3D city, with h
 
 ```
 extensions/      one folder per published extension
-packages/        labs-core (shared telemetry, logger, "More from Labs" view)
+packages/        labs-core (shared logger, links and the 'More from Indrasol Labs' view)
 templates/       extension-starter, the golden template every extension copies
 docs/            architecture, engineering standards, security practices, ADRs, specs, progress log
 ```
@@ -33,7 +33,7 @@ docs/            architecture, engineering standards, security practices, ADRs, 
 
 Read [`CONTRIBUTING.md`](CONTRIBUTING.md). Any open-source idea for developers is welcome, not
 just extensions: tools, libraries, agents and more. Open an
-[idea issue](https://github.com/indrasol/vsx-extensions/issues/new?template=extension-idea.yml).
+[idea issue](https://github.com/indrasol/vsx-extensions/issues/new?template=idea.yml).
 
 ## License
 
