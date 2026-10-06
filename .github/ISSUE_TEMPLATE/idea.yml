@@ -1,0 +1,43 @@
+name: Open-source idea
+description: Propose an open-source tool, library, agent or extension for developers. Maintainers review ideas regularly.
+title: '[idea] <name>: <one-liner>'
+labels: ['idea']
+body:
+  - type: dropdown
+    id: kind
+    attributes:
+      label: What kind of project?
+      options:
+        [
+          'Editor extension',
+          'CLI or developer tool',
+          'Library or SDK',
+          'AI agent or agent tooling',
+          'Other / not sure',
+        ]
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem (specific scenario)
+      description: What happens, to whom, how often? Link public complaints if you have them.
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed solution
+      description: In a sentence or two, what would it do? What does a developer see or get in the first minute?
+    validations:
+      required: true
+  - type: textarea
+    id: competitors
+    attributes:
+      label: Existing options you know of
+      description: Links to similar tools, packages, extensions or repos, and why they fall short.
+  - type: dropdown
+    id: lane
+    attributes:
+      label: Rough size
+      options: ['Mini (≤ 2 weeks)', 'Standard (≤ 4 weeks)', 'Bigger / not sure']

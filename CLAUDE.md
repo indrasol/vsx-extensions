@@ -21,6 +21,7 @@ Metrics, dashboard and the links site live outside this repo (ADR-0013).
 - This repo is public. Never copy content from the private planning repo into it (ideas,
   roadmap, targets, internal names). ADR-0010.
 - When given a task prompt, do exactly what it asks. Do not start the next task.
+- Do not add Co-Authored-By trailers to commits.
 
 ## Where to look
 
