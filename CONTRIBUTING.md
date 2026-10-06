@@ -9,7 +9,8 @@ Thanks for helping. This repo is a pnpm monorepo; every extension lives under `e
   [`docs/development.md`](docs/development.md).
 - New extensions start as a copy of `templates/extension-starter/`.
 - TypeScript strict, ESLint + Prettier clean, tests green (`pnpm test`).
-- No network calls or telemetry outside `packages/labs-core`, and never without a documented opt-in.
+- Zero telemetry; any future measurement needs a new ADR. No network calls outside
+  `packages/labs-core`, and never without a documented opt-in.
 - Never commit secrets. Push protection is on; if it blocks you, the secret is real — rotate it.
 
 ## Workflow

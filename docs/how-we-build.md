@@ -42,8 +42,7 @@ tools you install, and borrow anything useful.
 ## Why this matters for the tools you install
 
 - **Small scope:** each extension does one job, so it's easy to read and audit.
-- **Local-first:** no network calls by default; any telemetry is anonymous, documented and
-  follows your VS Code telemetry setting.
+- **Local-first:** no network calls by default and zero telemetry.
 - **Traceable:** from the decision (ADR) to the task prompt, the PR, the CI run and the signed-off
   release.
 

@@ -38,10 +38,7 @@ _Update if the extension needs a trusted workspace or a local file system._
 
 ## Privacy and telemetry
 
-This extension makes no network calls and collects no telemetry. The events it could send in a
-future version are listed in [`telemetry.json`](telemetry.json); none are collected today. If that
-changes, telemetry will be anonymous, go only through Indrasol Labs' shared core, and follow your
-VS Code `telemetry.telemetryLevel` setting (set it to `off` to disable).
+This extension makes no network calls and collects no telemetry.
 
 ## Security
 

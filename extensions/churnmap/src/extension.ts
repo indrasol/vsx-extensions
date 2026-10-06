@@ -28,11 +28,11 @@ import { argPath, type HotspotNode } from './panel/hotspotTree.js';
 import { HOTSPOTS_VIEW, HotspotsView } from './panel/HotspotsView.js';
 import { IGNORE_KEY, type IgnoreEntry, IgnoreStore } from './panel/ignore.js';
 import { ignoreHotspot, unignore } from './panel/ignoreCommands.js';
+import { clearLegacyInstallId } from './legacyInstallId.js';
 import { links, MORE_FROM_LABS_LINKS } from './links.js';
 import { copiedMessage, hotspotsMarkdown, localDate } from './panel/markdown.js';
 import { overridePrompts, type Prompts } from './prompts.js';
 import { REPOSITORY_KEY } from './repoChoice.js';
-import { createTelemetry } from './telemetry.js';
 import { isAnalysisAllowed, onAnalysisAllowed, showUntrustedMessage } from './trust.js';
 import { warmStart, type WarmStartOutcome } from './warmStart.js';
 
@@ -110,7 +110,6 @@ export interface TestApi {
 export function activate(context: vscode.ExtensionContext): TestApi | undefined {
   const activateStartedAt = performance.now();
   const logger = createLogger('Churnmap');
-  const telemetry = createTelemetry(context);
   const store = new AnalysisStore();
   const ignores = new IgnoreStore(context.workspaceState);
   store.setIgnoreSource(() => ignores.list());
@@ -123,7 +122,7 @@ export function activate(context: vscode.ExtensionContext): TestApi | undefined 
   // Selecting a hotspot selects its building when the city is open (it is never opened for it).
   const hotspots = new HotspotsView(store, (path) => CityPanel.instance?.select(path));
   const builder = new Builder(context, logger, store);
-  context.subscriptions.push(logger, telemetry, hotspots, store);
+  context.subscriptions.push(logger, hotspots, store);
 
   const rankBar = new RankStatusBar(store);
   const scm = new ScmWatch(store, logger);
@@ -154,12 +153,7 @@ export function activate(context: vscode.ExtensionContext): TestApi | undefined 
   };
 
   const register = (id: string, handler: (...args: unknown[]) => unknown): void => {
-    context.subscriptions.push(
-      vscode.commands.registerCommand(id, (...args: unknown[]) => {
-        telemetry.commandExecuted(id);
-        return handler(...args);
-      }),
-    );
+    context.subscriptions.push(vscode.commands.registerCommand(id, handler));
   };
 
   register(COMMANDS.build, async () => {
@@ -305,13 +299,17 @@ export function activate(context: vscode.ExtensionContext): TestApi | undefined 
   };
   registerMoreFromLabsView(context, labsOptions);
 
-  telemetry.activated();
-
   // Warm start: a cached analysis for this root + HEAD fills the panel, city and status bar
   // without a build. After activation returns, so it costs activation nothing.
   setImmediate(warmStartInBackground);
   // Agent configs written by an older version point at its server path: offer to fix them (reads
   // only; writes on the user's click).
+  // 1.0.0 and 1.0.1 stored an install id for telemetry that never shipped: clear it once.
+  setImmediate(() => {
+    clearLegacyInstallId(context.globalState).catch((err: unknown) => {
+      logger.warn(`Install id cleanup failed: ${err instanceof Error ? err.message : String(err)}`);
+    });
+  });
   setImmediate(() => {
     checkAgentConfigs(connectDeps).catch((err: unknown) => {
       logger.warn(`Agent config check failed: ${err instanceof Error ? err.message : String(err)}`);

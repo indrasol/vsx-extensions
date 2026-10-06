@@ -14,7 +14,7 @@ or bloated packages in that layout. VS Code also recommends bundling for activat
 Every extension is TypeScript in strict mode, bundled by esbuild into `dist/extension.js`
 (CommonJS, `vscode` external, minified for release), and packaged with
 `vsce package --no-dependencies`. `.vscodeignore` ships only `dist/`, `media/`, README,
-CHANGELOG, LICENSE and `telemetry.json`.
+CHANGELOG and LICENSE.
 
 ## Alternatives considered
 

@@ -164,8 +164,7 @@ with another version is ignored and rebuilt.
 - **Webview (ADR-0011).** The city is a browser bundle with three.js included, loaded under a
   strict CSP with a per-load nonce. Every message from the webview is validated
   (`src/city/protocol.ts`); test-only messages are accepted only in test mode.
-- **Telemetry (ADR-0006).** None in 1.0. `telemetry.json` lists the events a future version would
-  send, as not collected; `src/telemetry.ts` wires the labs-core wrapper to a no-op sender.
+- **Zero telemetry.** No telemetry code and no install id; any future measurement needs a new ADR.
 - **Naming (ADR-0008).** The id `Indrasol.churnmap` never changes; the description ends with
   "by Indrasol Labs".
 - **Activation.** No I/O and no `await` before everything is registered. `activate()` measures

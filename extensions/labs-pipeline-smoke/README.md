@@ -13,8 +13,7 @@ A copy of the Indrasol Labs extension template: a **Labs Smoke: Hello** command,
 
 ## Privacy and telemetry
 
-This extension makes no network calls and collects no telemetry. The events listed in
-[`telemetry.json`](telemetry.json) are not collected.
+This extension makes no network calls and collects no telemetry.
 
 ## Security
 

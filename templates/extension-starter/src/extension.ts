@@ -1,7 +1,6 @@
 import { createLogger, registerMoreFromLabsView } from '@indrasol/labs-core';
 import * as vscode from 'vscode';
 import { greeting } from './hello.js';
-import { createTelemetry } from './telemetry.js';
 
 const moduleLoadedAt = performance.now();
 
@@ -18,12 +17,10 @@ export interface ExtensionApi {
 export function activate(context: vscode.ExtensionContext): ExtensionApi {
   const activateStartedAt = performance.now();
   const logger = createLogger('Labs Starter');
-  const telemetry = createTelemetry(context);
-  context.subscriptions.push(logger, telemetry);
+  context.subscriptions.push(logger);
 
   context.subscriptions.push(
     vscode.commands.registerCommand(HELLO_COMMAND, () => {
-      telemetry.commandExecuted(HELLO_COMMAND);
       void vscode.window.showInformationMessage(greeting());
     }),
   );
@@ -34,7 +31,6 @@ export function activate(context: vscode.ExtensionContext): ExtensionApi {
     campaign: 'extension-starter',
   });
 
-  telemetry.activated();
   const activationMs = performance.now() - activateStartedAt;
 
   if (context.extensionMode === vscode.ExtensionMode.Development) {

@@ -23,7 +23,7 @@ whose CI is meant to build, test and publish extensions only.
 - Extensions link only to first-party short links on `labs.indrasol.com`, and a link is opened only
   when the user clicks it. The short link records the click (no IP address, cookie or user-agent
   string) and redirects.
-- Extensions send no telemetry. ADR-0006 still governs any future opt-in telemetry.
+- Extensions send no telemetry. Any future measurement needs a new ADR (ADR-0006 is superseded).
 - The public site stores no personal data without explicit consent: a form submission is kept only
   when the person ticks a consent box that links to the privacy page.
 - The empty `collector/` and `dashboard/` placeholders and their workspace entries are removed.

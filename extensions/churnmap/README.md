@@ -277,8 +277,7 @@ writes only to Churnmap's cache folder and to `.churnmap/` in a repository that 
 
 ## Privacy and telemetry
 
-- **Zero telemetry.** Churnmap collects nothing. The events it would use are listed in
-  `telemetry.json` inside the extension, marked as not collected.
+- **Zero telemetry.** Churnmap collects nothing and contains no telemetry code.
 - **No network calls.** Analysis runs `git` and reads files on your machine; the city is drawn by
   code bundled in the extension and loads nothing from the internet. The few links in Churnmap's
   side bar and walkthrough open your browser only when you click them. AI prompts, the agent
