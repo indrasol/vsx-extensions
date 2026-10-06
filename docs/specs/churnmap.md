@@ -131,8 +131,7 @@ contents. Adding the server to an agent's configuration is the user's trust deci
 
 ## 9. Privacy
 
-- No telemetry in 1.0 (ADR-0006, ADR-0013): `telemetry.json` lists the events a future version
-  would use, marked as not collected; the labs-core wrapper is wired to a no-op sender.
+- Zero telemetry (ADR-0013): no telemetry code ships, and no install or user id is stored.
 - No network calls. Links in the side bar and walkthrough are first-party short links that open
   in the browser only on a click.
 - The postcard contains the repository folder's name, the window, the legend, the city's shapes

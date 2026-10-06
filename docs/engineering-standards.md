@@ -19,14 +19,12 @@ Copy `templates/extension-starter/` to `extensions/<kebab-name>/`. The template 
 extension-starter/
 ├── package.json          manifest
 ├── src/extension.ts      activate/deactivate, command registration
-├── src/telemetry.ts      thin wrapper over packages/labs-core telemetry
 ├── test/                 @vscode/test-cli + @vscode/test-electron integration tests
 ├── media/icon.png        256×256 PNG (SVG icons are not allowed)
 ├── media/demo.gif        ≤ 10 s, shown at the top of the README
 ├── README.md · CHANGELOG.md
-├── telemetry.json        documents every event collected (VS Code convention)
 ├── esbuild.mjs           bundles to dist/extension.js
-├── .vscodeignore         ship only dist/, media/, README, CHANGELOG, LICENSE, telemetry.json
+├── .vscodeignore         ship only dist/, media/, README, CHANGELOG, LICENSE
 └── tsconfig.json
 ```
 
@@ -56,14 +54,10 @@ extension-starter/
 - Accessibility: every UI element has a keyboard path and an ARIA label and works in high-contrast themes.
 - Tests: ≥ 70% coverage of core logic, plus at least one integration test that activates the extension.
 
-## Telemetry (ADR-0006)
+## Telemetry
 
-- Only through `packages/labs-core`, built on `vscode.env.createTelemetryLogger()`, which honours
-  the user's VS Code telemetry setting; also checks `isTelemetryEnabled` / `onDidChangeTelemetryEnabled`.
-- Anonymous events only: `activated`, `command_executed` (command id), `feature_used`,
-  `error` (class only), plus extension version, VS Code version, host app name and a random per-install id.
-  No machine id, file paths, code or message text.
-- Every event is listed in `telemetry.json` and in the README's Telemetry section, with how to turn it off.
+- Zero telemetry. Extensions collect nothing and store no install or user id.
+- Any future measurement needs a new ADR (ADR-0006 is superseded).
 
 ## Definition of done (release-ready)
 

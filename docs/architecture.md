@@ -18,7 +18,7 @@ vsx-extensions/
 ├── .vscode/                     shared editor settings + recommended extensions
 ├── docs/                        architecture, engineering-standards, security-practices, development, PROGRESS, adr/, specs/
 ├── templates/extension-starter/ golden template (copied for every new extension)
-├── packages/labs-core/          shared, bundled from source: logger, telemetry wrapper (no-op sender in v1), "More from Labs" view
+├── packages/labs-core/          shared, bundled from source: logger, links, "More from Indrasol Labs" view
 └── extensions/<name>/           one workspace per published extension
 ```
 

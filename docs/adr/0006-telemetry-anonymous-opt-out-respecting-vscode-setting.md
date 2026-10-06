@@ -1,7 +1,11 @@
 # ADR 0006 — Telemetry is anonymous, goes through labs-core, and follows the VS Code telemetry setting
 
-- **Status:** Accepted
+- **Status:** Superseded (2026-10-05): telemetry removed
 - **Date:** 2026-09-27
+
+> **Note (2026-10-05):** Telemetry was removed. The labs-core telemetry module, its wiring in every
+> extension and the template, `telemetry.json` and the per-install id are gone, and no extension
+> collects anything. Any future measurement needs a new ADR; this one is kept as a record.
 
 ## Context
 

@@ -12,11 +12,10 @@ standard. This page is linked from every extension README. To report a vulnerabi
       packages and reject any that contain secrets.
 - [ ] CodeQL (GitHub default setup) is clean for the extension's code.
 - [ ] A CycloneDX SBOM is generated and attached to the GitHub Release.
-- [ ] `vsce ls` reviewed: only `dist/`, `media/`, README, CHANGELOG, LICENSE and `telemetry.json` ship.
+- [ ] `vsce ls` reviewed: only `dist/`, `media/`, README, CHANGELOG, and LICENSE ship.
 - [ ] No dynamic code execution (`eval`, `new Function`, remote script loading). Webviews use a
       strict Content Security Policy with nonces.
-- [ ] Network calls are opt-in, documented and HTTPS-only. Telemetry is anonymous and respects the
-      VS Code telemetry setting.
+- [ ] Network calls are opt-in, documented and HTTPS-only. Zero telemetry and no install or user id.
 - [ ] Release notes and CHANGELOG are updated. The GitHub Release includes the VSIX, its SHA-256 and the SBOM.
 
 ## Pipeline controls

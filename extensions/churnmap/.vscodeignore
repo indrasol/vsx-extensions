@@ -16,5 +16,4 @@
 !LICENSE
 # Licences of the bundled third-party code (scripts/third-party-notices.mjs, run by `pnpm build`).
 !ThirdPartyNotices.txt
-!telemetry.json
 !package.json

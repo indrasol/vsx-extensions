@@ -87,40 +87,10 @@ export function createMockChannel(name = 'mock'): MockLogChannel {
   };
 }
 
-interface Sender {
-  sendEventData(eventName: string, data?: Record<string, unknown>): void;
-  sendErrorData(error: Error, data?: Record<string, unknown>): void;
-}
-
-interface LoggerOptions {
-  additionalCommonProperties?: Record<string, unknown>;
-}
-
-const telemetryEnabled = new EventEmitter<boolean>();
-
-/** Like VS Code, the logger merges common properties and forwards to the sender. */
-function createTelemetryLogger(sender: Sender, options: LoggerOptions = {}) {
-  const common = options.additionalCommonProperties ?? {};
-  const logger = {
-    logUsage: vi.fn((eventName: string, data?: Record<string, unknown>) => {
-      sender.sendEventData(eventName, { ...common, ...data });
-    }),
-    logError: vi.fn((error: Error, data?: Record<string, unknown>) => {
-      sender.sendErrorData(error, { ...common, ...data });
-    }),
-    dispose: vi.fn(),
-  };
-  mock.telemetryLoggers.push({ sender, options, logger });
-  return logger;
-}
-
 export const env = {
   appName: 'Visual Studio Code',
   uriScheme: 'vscode',
-  isTelemetryEnabled: true,
-  onDidChangeTelemetryEnabled: telemetryEnabled.event,
   openExternal: vi.fn(() => Promise.resolve(true)),
-  createTelemetryLogger,
 };
 
 export const version = '1.96.0';
@@ -147,19 +117,12 @@ export const commands = {
 /** Recorded state and helpers for tests. */
 export const mock = {
   channels: [] as MockLogChannel[],
-  telemetryLoggers: [] as { sender: Sender; options: LoggerOptions; logger: unknown }[],
   treeViews: new Map<string, unknown>(),
   commands: new Map<string, (...args: unknown[]) => unknown>(),
-  setTelemetryEnabled(value: boolean): void {
-    env.isTelemetryEnabled = value;
-    telemetryEnabled.fire(value);
-  },
   reset(): void {
     mock.channels.length = 0;
-    mock.telemetryLoggers.length = 0;
     mock.treeViews.clear();
     mock.commands.clear();
-    env.isTelemetryEnabled = true;
     env.uriScheme = 'vscode';
     vi.clearAllMocks();
   },

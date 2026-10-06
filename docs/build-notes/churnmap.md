@@ -20,9 +20,8 @@ git as the only requirement.
 - **Safe git and Workspace Trust** ([ADR-0012](../adr/0012-git-invocation-safety-and-workspace-trust.md)).
   One spawn site (`src/analysis/gitProcess.ts`) adds the pager, fsmonitor and hooks overrides and
   the git environment variables to every call. Analysis is off until the workspace is trusted.
-- **No telemetry** ([ADR-0006](../adr/0006-telemetry-anonymous-opt-out-respecting-vscode-setting.md),
-  [ADR-0013](../adr/0013-metrics-and-lead-capture-outside-public-repo.md)). The labs-core wrapper
-  is wired to a no-op sender; links are first-party short links opened only on a click.
+- **Zero telemetry** ([ADR-0013](../adr/0013-metrics-and-lead-capture-outside-public-repo.md)).
+  No telemetry code ships; links are first-party short links opened only on a click.
 - **Relative bands, explained scores.** Bands are percentiles within the repository, so #1 is
   always a Hotspot, and no score is ever shown without its reasons.
 - **Indentation complexity.** Language-agnostic and linear in file size, measured in a

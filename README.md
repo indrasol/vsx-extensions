@@ -20,7 +20,7 @@ review everything as humans: see [how we build](docs/how-we-build.md). See
 
 ```
 extensions/      one folder per published extension
-packages/        labs-core (shared telemetry, logger, "More from Labs" view)
+packages/        labs-core (shared logger, links and the 'More from Indrasol Labs' view)
 templates/       extension-starter, the golden template every extension copies
 docs/            architecture, engineering standards, security practices, ADRs, specs, progress log
 ```

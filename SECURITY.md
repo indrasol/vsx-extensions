@@ -24,12 +24,10 @@ We commit to:
 - CodeQL analysis is clean.
 - A CycloneDX SBOM is generated and attached to the GitHub Release together with the
   VSIX and its SHA-256.
-- `vsce ls` is reviewed so only `dist/`, `media/`, README, CHANGELOG, LICENSE and
-  `telemetry.json` ship.
+- `vsce ls` is reviewed so only `dist/`, `media/`, README, CHANGELOG and LICENSE ship.
 - No dynamic code execution; webviews use a strict CSP with nonces.
 - No network calls by default. Anything that talks to the network is opt-in and documented.
-- Telemetry, when present, is anonymous, documented in `telemetry.json`, and respects the
-  VS Code telemetry setting.
+- Zero telemetry: extensions collect nothing and store no install or user id.
 - Publishing happens only from CI, from a protected tag, after a human approval gate.
   No laptop ever publishes.
 

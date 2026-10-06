@@ -2,6 +2,14 @@
 
 _Append a short entry after every merged task. Newest at the top._
 
+## 2026-10-05 — Telemetry removed; Churnmap 1.0.2
+
+- **Done:** `packages/labs-core/src/telemetry.ts`, its exports and tests are deleted, along with the
+  wiring and `telemetry.json` in Churnmap, the extension starter and labs-pipeline-smoke. Nothing
+  writes an install id to `globalState` any more. Docs, the PR template and the ship list now say
+  zero telemetry; ADR-0006 is marked superseded (any future measurement needs a new ADR).
+  Churnmap is 1.0.2 with no behaviour change.
+
 ## 2026-10-01 — Churnmap initial release (1.0.0)
 
 - **Done:** `extensions/churnmap/` added as one initial-release commit: version 1.0.0, a single

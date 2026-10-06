@@ -33,8 +33,8 @@ Run a single extension: open its folder (`extensions/<name>/`) in VS Code and pr
 ## Run the template
 
 `templates/extension-starter/` is a complete extension that is never published. It shows how
-every Labs extension is wired: esbuild bundle, `@indrasol/labs-core` logger, no-op telemetry and
-the "More from Indrasol Labs" view, a walkthrough, Vitest unit tests and integration tests.
+every Labs extension is wired: esbuild bundle, `@indrasol/labs-core` logger and the
+"More from Indrasol Labs" view, a walkthrough, Vitest unit tests and integration tests.
 
 - **Debug it:** open `templates/extension-starter/` in VS Code and press F5 (_Run Extension_
   builds first). Run **Labs Starter: Hello** from the Command Palette; the activation time is
@@ -61,7 +61,7 @@ Follow [`engineering-standards.md`](engineering-standards.md#starting-a-new-exte
    container and More-from-Labs view (`<camelName>.moreFromLabs`) ids all use it. View and command
    ids are global in VS Code, so two installed Labs extensions must not share them.
 4. Replace `media/icon.png` with the extension's icon, add `media/demo.gif`, and fill in every
-   placeholder in `README.md`, `CHANGELOG.md` and `telemetry.json`.
+   placeholder in `README.md` and `CHANGELOG.md`.
 5. `pnpm install`, then `pnpm --filter <kebab-name> test` and `pnpm --filter <kebab-name> package`.
 
 ## Releasing

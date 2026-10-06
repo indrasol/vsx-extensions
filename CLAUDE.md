@@ -13,7 +13,8 @@ Metrics, dashboard and the links site live outside this repo (ADR-0013).
 
 - Read docs/engineering-standards.md and docs/security-practices.md before any extension work.
 - Every new extension starts from templates/extension-starter/.
-- No network calls or telemetry without going through packages/labs-core and a documented opt-in.
+- Zero telemetry, and no install or user id. Any future measurement needs a new ADR.
+- No network calls without going through packages/labs-core and a documented opt-in.
 - Never commit secrets. Never publish from a laptop: releases happen only via tags → release.yml.
 - Package with `vsce package --no-dependencies` (bundled with esbuild).
 - Conventional Commits with scope = workspace name, e.g. `feat(<ext>): …`, `chore(ci): …`.

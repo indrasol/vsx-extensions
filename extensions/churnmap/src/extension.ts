@@ -32,7 +32,6 @@ import { links, MORE_FROM_LABS_LINKS } from './links.js';
 import { copiedMessage, hotspotsMarkdown, localDate } from './panel/markdown.js';
 import { overridePrompts, type Prompts } from './prompts.js';
 import { REPOSITORY_KEY } from './repoChoice.js';
-import { createTelemetry } from './telemetry.js';
 import { isAnalysisAllowed, onAnalysisAllowed, showUntrustedMessage } from './trust.js';
 import { warmStart, type WarmStartOutcome } from './warmStart.js';
 
@@ -110,7 +109,6 @@ export interface TestApi {
 export function activate(context: vscode.ExtensionContext): TestApi | undefined {
   const activateStartedAt = performance.now();
   const logger = createLogger('Churnmap');
-  const telemetry = createTelemetry(context);
   const store = new AnalysisStore();
   const ignores = new IgnoreStore(context.workspaceState);
   store.setIgnoreSource(() => ignores.list());
@@ -123,7 +121,7 @@ export function activate(context: vscode.ExtensionContext): TestApi | undefined 
   // Selecting a hotspot selects its building when the city is open (it is never opened for it).
   const hotspots = new HotspotsView(store, (path) => CityPanel.instance?.select(path));
   const builder = new Builder(context, logger, store);
-  context.subscriptions.push(logger, telemetry, hotspots, store);
+  context.subscriptions.push(logger, hotspots, store);
 
   const rankBar = new RankStatusBar(store);
   const scm = new ScmWatch(store, logger);
@@ -154,12 +152,7 @@ export function activate(context: vscode.ExtensionContext): TestApi | undefined 
   };
 
   const register = (id: string, handler: (...args: unknown[]) => unknown): void => {
-    context.subscriptions.push(
-      vscode.commands.registerCommand(id, (...args: unknown[]) => {
-        telemetry.commandExecuted(id);
-        return handler(...args);
-      }),
-    );
+    context.subscriptions.push(vscode.commands.registerCommand(id, handler));
   };
 
   register(COMMANDS.build, async () => {
@@ -304,8 +297,6 @@ export function activate(context: vscode.ExtensionContext): TestApi | undefined 
     links: MORE_FROM_LABS_LINKS,
   };
   registerMoreFromLabsView(context, labsOptions);
-
-  telemetry.activated();
 
   // Warm start: a cached analysis for this root + HEAD fills the panel, city and status bar
   // without a build. After activation returns, so it costs activation nothing.
