@@ -3,7 +3,11 @@ import * as vscode from 'vscode';
 import type { TestApi } from '../../src/extension.js';
 
 const EXTENSION_ID = 'Indrasol.churnmap';
-const CACHED_BUDGET_MS = 200;
+// The cache itself answers in ~10 ms everywhere; the rest is VS Code running the command. On a
+// slow windows-latest runner that overhead alone has reached ~290 ms (run 37086698533: "11 ms
+// (cached) (command 296.5 ms)"), so Windows gets a higher budget. Still far below an uncached
+// build (~600 ms there).
+const CACHED_BUDGET_MS = process.platform === 'win32' ? 400 : 200;
 
 async function api(): Promise<TestApi> {
   const ext = vscode.extensions.getExtension<TestApi | undefined>(EXTENSION_ID);

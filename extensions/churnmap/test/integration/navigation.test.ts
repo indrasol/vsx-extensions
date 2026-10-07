@@ -91,6 +91,29 @@ async function targetAtRest(testApi: TestApi, timeoutMs = 10_000): Promise<void>
   assert.fail(`the camera target did not come to rest within ${String(timeoutMs)} ms`);
 }
 
+/**
+ * Pill stats once the label layout has caught up with the camera. Pills are re-placed every
+ * OCCLUSION_MS on the frame loop and keep their last offsets in between, so while a damped pan
+ * still moves (longer on a slow, software-rendered runner) two pills can briefly cross (#22).
+ * Waits for the render-settled signal, then reads again until no pill overlaps or `timeoutMs`
+ * passes; the last read is returned, so a real overlap still fails.
+ */
+async function settledPills(
+  testApi: TestApi,
+  timeoutMs = 2000,
+): Promise<Record<string, number | boolean>> {
+  const reply = testApi.__city.nextMessage('test:stats', 15_000);
+  post(testApi, { type: 'test:settle', timeoutMs: 10_000 });
+  await reply;
+  const deadline = Date.now() + timeoutMs;
+  let s = await stats(testApi);
+  while (Number(s.pillOverlaps) !== 0 && Date.now() < deadline) {
+    await pause(100);
+    s = await stats(testApi);
+  }
+  return s;
+}
+
 async function fitBoxes(
   testApi: TestApi,
   width: number,
@@ -298,7 +321,7 @@ suite('Navigation: pan, zoom, fit, labels', function () {
     ] as const) {
       if (action) post(testApi, action);
       await pause(600);
-      const s = await stats(testApi);
+      const s = await settledPills(testApi);
       seen = Math.max(seen, Number(s.pills));
       assert.equal(s.pillOverlaps, 0, `pills overlap after ${JSON.stringify(action)}`);
     }
